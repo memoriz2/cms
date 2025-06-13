@@ -12,7 +12,6 @@ public class VideoResponse {
     private String title;
     private String description;
     private String youtubeUrl;
-    private String thumbnailUrl;
     private Integer displayOrder;
     private Boolean isActive;
     private LocalDateTime createdAt;

@@ -66,7 +66,6 @@ public class VideoService {
         response.setTitle(video.getTitle());
         response.setDescription(video.getDescription());
         response.setYoutubeUrl(video.getYoutubeUrl());
-        response.setThumbnailUrl(video.getThumbnailUrl());
         response.setDisplayOrder(video.getDisplayOrder());
         response.setIsActive(video.getIsActive());
         response.setCreatedAt(video.getCreatedAt());
@@ -79,7 +78,6 @@ public class VideoService {
         video.setTitle(request.getTitle());
         video.setDescription(request.getDescription());
         video.setYoutubeUrl(request.getYoutubeUrl());
-        video.setThumbnailUrl(request.getThumbnailUrl());
         video.setDisplayOrder(request.getDisplayOrder());
         video.setIsActive(request.getIsActive());
     }

@@ -9,7 +9,6 @@ public class VideoRequest {
     private String title;
     private String description;
     private String youtubeUrl;
-    private String thumbnailUrl;
     private Integer displayOrder;
     private Boolean isActive;
 }

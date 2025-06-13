@@ -31,8 +31,6 @@ public class Video {
     @Column(nullable = false, length = 1000)
     private String youtubeUrl;
 
-    private String thumbnailUrl;
-
     @Column(nullable = false)
     private Integer displayOrder;
 
