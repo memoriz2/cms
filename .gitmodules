@@ -1,0 +1,6 @@
+[submodule "frontend/admin-portal"]
+    path = frontend/admin-portal
+    url = https://github.com/memoriz2/cms.git
+[submodule "frontend/user-portal"]
+    path = frontend/user-portal
+    url = https://github.com/memoriz2/cms.git 
