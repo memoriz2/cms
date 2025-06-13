@@ -37,6 +37,10 @@ public class VideoService {
     public VideoResponse createVideo(VideoRequest request){
         Video video = new Video();
         updateVideoFromRequest(video, request);
+        // display_order가 null이면 기본값 0 설정
+        if (video.getDisplayOrder() == null) {
+            video.setDisplayOrder(0);
+        }
         return convertToResponse(videoRepository.save(video));
     }
 

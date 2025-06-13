@@ -28,7 +28,7 @@ public class Video {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String youtubeUrl;
 
     private String thumbnailUrl;
