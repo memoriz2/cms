@@ -16,10 +16,10 @@ import lombok.RequiredArgsConstructor;
 public class VideoUserController {
     private final VideoService videoService;
 
-    //영상 목록 조회
+    //활성화된 영상 목록 조회
     @GetMapping
     public ResponseEntity<List<VideoResponse>> getAllVideos(){
-        return ResponseEntity.ok(videoService.getAllVideos());
+        return ResponseEntity.ok(videoService.getActiveVideos());
     }
 
     // 영상 상세 조회

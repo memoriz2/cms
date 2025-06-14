@@ -25,6 +25,13 @@ public class VideoService {
             .collect(Collectors.toList());
     }
 
+    // 활성화된 영상만 조회
+    public List<VideoResponse> getActiveVideos() {
+        return videoRepository.findByIsActiveTrue().stream()
+            .map(this::convertToResponse)
+            .collect(Collectors.toList());
+    }
+
     // 영상 상세 조회
     public VideoResponse getVideo(Long id){
         Video video = videoRepository.findById(id)
