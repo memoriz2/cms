@@ -19,9 +19,11 @@
     },
     "scripts": {
         "dev": "vite --port 3001",
-        "build": "tsc && vite build",
-        "start": "vite preview --port 3001",
-        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+        "build": "react-scripts build",
+        "start": "set PORT=3001 && react-scripts start",
+        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject"
     },
     "eslintConfig": {
         "extends": [

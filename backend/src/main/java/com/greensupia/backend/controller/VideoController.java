@@ -8,24 +8,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Pageable;
 
 import com.greensupia.backend.dto.request.VideoRequest;
+import com.greensupia.backend.dto.response.PageResponse;
 import com.greensupia.backend.dto.response.VideoResponse;
 import com.greensupia.backend.service.VideoService;
 import lombok.RequiredArgsConstructor;
-import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/portal/videos")
 @RequiredArgsConstructor
-public class VideoController {
+public class VideoController extends BaseController {
     private final VideoService videoService;
 
     // 영상 목록 조회
     @GetMapping
-    public ResponseEntity<List<VideoResponse>> getAllVideos(){
-        return ResponseEntity.ok(videoService.getAllVideos());
+    public ResponseEntity<PageResponse<VideoResponse>> getAllVideos(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(defaultValue = "createAt") String sortBy,
+        @RequestParam(defaultValue = "desc") String sortDir
+    ){
+        Pageable pageable = createPageable(page, size, sortBy, sortDir);
+        PageResponse<VideoResponse> response = videoService.getAllVideos(pageable);
+        return ResponseEntity.ok(response);
     }
 
     // 영상 상세 조회

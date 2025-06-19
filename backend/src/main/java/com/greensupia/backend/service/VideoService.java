@@ -2,12 +2,16 @@ package com.greensupia.backend.service;
 
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.greensupia.backend.repository.VideoRepository;
 import com.greensupia.backend.dto.request.VideoRequest;
 import com.greensupia.backend.dto.response.VideoResponse;
+import com.greensupia.backend.dto.response.PageResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import com.greensupia.backend.entity.Video;
@@ -30,6 +34,21 @@ public class VideoService {
         return videoRepository.findByIsActiveTrue().stream()
             .map(this::convertToResponse)
             .collect(Collectors.toList());
+    }
+
+    private final PaginationService paginationService;
+
+    // 모든 영상을 페이징으로 조회
+    public PageResponse<VideoResponse> getAllVideos(Pageable pageable){
+        Page<Video> videoPage = videoRepository.findAll(pageable);
+        Page<VideoResponse> responsePage = videoPage.map(this::convertToResponse);
+        return paginationService.convertToPageResponse(responsePage);
+    }
+
+    public PageResponse<VideoResponse> getActiveVideos(Pageable pageable){
+        Page<Video> videoPage = videoRepository.findByIsActiveTrue(pageable);
+        Page<VideoResponse> responsePage = videoPage.map(this::convertToResponse);
+        return paginationService.convertToPageResponse(responsePage);
     }
 
     // 영상 상세 조회
@@ -88,4 +107,6 @@ public class VideoService {
         video.setDisplayOrder(request.getDisplayOrder());
         video.setIsActive(request.getIsActive());
     }
+
+    
 }
