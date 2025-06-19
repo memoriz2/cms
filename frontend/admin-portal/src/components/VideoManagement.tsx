@@ -2,6 +2,7 @@ import React, { FormEvent, useEffect, useState } from "react";
 import { API_ENDPOINTS } from "../config";
 import axios from "axios";
 import "./VideoManagement.css";
+import Pagination from "./Pagination";
 
 interface Video {
     id: number;
