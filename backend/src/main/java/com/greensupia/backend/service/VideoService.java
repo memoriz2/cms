@@ -21,6 +21,7 @@ import com.greensupia.backend.entity.Video;
 @Transactional(readOnly = true)
 public class VideoService {
     private final VideoRepository videoRepository;
+    private final PaginationService paginationService;
 
     // 영상 목록 조회
     public List<VideoResponse> getAllVideos(){
@@ -35,8 +36,6 @@ public class VideoService {
             .map(this::convertToResponse)
             .collect(Collectors.toList());
     }
-
-    private final PaginationService paginationService;
 
     // 모든 영상을 페이징으로 조회
     public PageResponse<VideoResponse> getAllVideos(Pageable pageable){

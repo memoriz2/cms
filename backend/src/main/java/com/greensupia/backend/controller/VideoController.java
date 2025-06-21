@@ -30,7 +30,7 @@ public class VideoController extends BaseController {
     public ResponseEntity<PageResponse<VideoResponse>> getAllVideos(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestParam(defaultValue = "createAt") String sortBy,
+        @RequestParam(defaultValue = "createdAt") String sortBy,
         @RequestParam(defaultValue = "desc") String sortDir
     ){
         Pageable pageable = createPageable(page, size, sortBy, sortDir);
@@ -62,4 +62,5 @@ public class VideoController extends BaseController {
         videoService.deleteVideo(id);
         return ResponseEntity.ok().build();
     }
+    
 }
