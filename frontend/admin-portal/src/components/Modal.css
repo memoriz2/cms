@@ -1,0 +1,65 @@
+/* frontend/admin-portal/src/components/Modal.css */
+.custom-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.custom-modal {
+  background: #fff;
+  padding: 32px 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  min-width: 300px;
+  max-width: 500px;
+}
+
+.custom-modal p {
+  margin: 0 0 20px 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.modal-actions button {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.modal-actions .confirm-btn {
+  background: #19c37d;
+  color: #fff;
+}
+
+.modal-actions .confirm-btn:hover {
+  background: #15a367;
+}
+
+.modal-actions .cancel-btn {
+  background: #f5f5f5;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.modal-actions .cancel-btn:hover {
+  background: #e8e8e8;
+}
