@@ -32,6 +32,8 @@ public class SecurityConfig {
                 // .requestMatchers("/api/portal/**").hasRole("CONTENT_MANAGER")
                 .requestMatchers("/api/portal/**").permitAll()  // 임시로 모든 요청 허용
                 .requestMatchers("/api/videos/**").permitAll()
+                .requestMatchers("/api/banners/**").permitAll()  // 사용자용 배너 API 허용
+                .requestMatchers("/uploads/**").permitAll()  // 정적 파일 접근 허용
                 .anyRequest().authenticated();
         
         return http.build();
