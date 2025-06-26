@@ -88,7 +88,7 @@ export default function Home() {
   }
 
   return (
-    <div className="main-container">
+    <main className="main-container">
       {/* 배너 섹션 */}
       {banner && banner.filePath && banner.filePath.trim() !== "" && (
         <section className="banner-section">
@@ -109,7 +109,8 @@ export default function Home() {
           />
         </section>
       )}
-
+      {/* {인사말 섹션} */}
+      <section className="greeting-section"></section>
       {/* 비디오 섹션 */}
       <section className="video-section">
         {video ? (
@@ -130,6 +131,6 @@ export default function Home() {
           </div>
         )}
       </section>
-    </div>
+    </main>
   );
 }
