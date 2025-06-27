@@ -1,20 +1,76 @@
 package com.greensupia.backend.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.greensupia.backend.entity.Greeting;
 import com.greensupia.backend.repository.GreetingRepository;
 import com.greensupia.backend.dto.request.EditorContentRequest;
 import com.greensupia.backend.dto.response.EditorContentResponse;
+import com.greensupia.backend.dto.response.PageResponse;
+import java.util.List;
+import java.util.Optional;
 
 @Service
-public class GreetingService extends EditorContentService {
+public class GreetingService {
     private final GreetingRepository greetingRepository;
+    private final PaginationService paginationService;
 
     public GreetingService(GreetingRepository greetingRepository, PaginationService paginationService) {
-        super(greetingRepository, paginationService);
         this.greetingRepository = greetingRepository;
+        this.paginationService = paginationService;
     }
 
-    // 인사말만의 특별한 로직들이 필요하면 여기에 추가
-    // 현재는 EditorContentService의 모든 기능을 그대로 사용
+    public PageResponse<EditorContentResponse> getGreetings(Pageable pageable) {
+        Page<Greeting> greetingPage = greetingRepository.findAll(pageable);
+        Page<EditorContentResponse> responsePage = greetingPage.map(this::convertToResponse);
+        return paginationService.convertToPageResponse(responsePage);
+    }
+
+    public EditorContentResponse createGreeting(EditorContentRequest request) {
+        Greeting greeting = new Greeting();
+        greeting.setTitle(request.getTitle());
+        greeting.setContent(request.getContent());
+        greeting.setIsActive(request.getIsActive());
+        
+        Greeting savedGreeting = greetingRepository.save(greeting);
+        return convertToResponse(savedGreeting);
+    }
+
+    public EditorContentResponse updateGreeting(Long id, EditorContentRequest request) {
+        Optional<Greeting> optionalGreeting = greetingRepository.findById(id);
+        if (optionalGreeting.isPresent()) {
+            Greeting greeting = optionalGreeting.get();
+            greeting.setTitle(request.getTitle());
+            greeting.setContent(request.getContent());
+            greeting.setIsActive(request.getIsActive());
+            
+            Greeting updatedGreeting = greetingRepository.save(greeting);
+            return convertToResponse(updatedGreeting);
+        }
+        throw new RuntimeException("Greeting not found with id: " + id);
+    }
+
+    public void deleteGreeting(Long id) {
+        greetingRepository.deleteById(id);
+    }
+
+    public EditorContentResponse getGreeting(Long id) {
+        Optional<Greeting> optionalGreeting = greetingRepository.findById(id);
+        if (optionalGreeting.isPresent()) {
+            return convertToResponse(optionalGreeting.get());
+        }
+        throw new RuntimeException("Greeting not found with id: " + id);
+    }
+
+    private EditorContentResponse convertToResponse(Greeting greeting) {
+        EditorContentResponse response = new EditorContentResponse();
+        response.setId(greeting.getId());
+        response.setTitle(greeting.getTitle());
+        response.setContent(greeting.getContent());
+        response.setIsActive(greeting.getIsActive());
+        response.setCreatedAt(greeting.getCreatedAt());
+        response.setUpdatedAt(greeting.getUpdatedAt());
+        return response;
+    }
 } 

@@ -27,6 +27,12 @@ const Sidebar = ({
       id: "banners",
       path: "/banners",
     },
+    {
+      label: "인사말 관리",
+      icon: "greeting",
+      id: "greetings",
+      path: "/greetings",
+    },
   ];
 
   return (
