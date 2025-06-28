@@ -12,6 +12,7 @@ import TableHeader from "@tiptap/extension-table-header";
 import TextAlign from "@tiptap/extension-text-align";
 import ImageResize from "tiptap-extension-resize-image";
 import { HexColorPicker } from "react-colorful";
+import { useApplyMarkDataColor } from "../hooks/useApplyMarkDataColor";
 import "./TipTapEditor.css";
 
 // 커스텀 FontFamily 확장
@@ -95,17 +96,56 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
     if (!editor) return;
     const currentEditorHtml = editor.getHTML();
     if (currentEditorHtml !== value) {
-      let processedValue = value;
-      if (value) {
-        processedValue = value
-          .replace(/\s+data-color="[^"]*"/g, "")
-          .replace(/\s+data-highlight="[^"]*"/g, "")
-          .replace(/\s+data-font-family="[^"]*"/g, "")
-          .replace(/\s+data-font-size="[^"]*"/g, "");
+      console.log("=== 이미지 디버깅 ===");
+      console.log("원본 HTML:", value);
+
+      // 이미지 태그 개수 확인
+      const imgMatches = value.match(/<img[^>]*>/g);
+      console.log("이미지 태그 개수:", imgMatches ? imgMatches.length : 0);
+
+      if (imgMatches) {
+        imgMatches.forEach((imgTag, index) => {
+          console.log(`이미지 ${index + 1}:`, imgTag);
+        });
       }
-      editor.commands.setContent(processedValue || "<p></p>", false);
+
+      editor.commands.setContent(value || "<p></p>", false);
+
+      // 에디터가 렌더링된 후 이미지가 없으면 직접 추가
+      setTimeout(() => {
+        const editorElement = document.querySelector(".tiptap");
+        if (editorElement) {
+          const images = editorElement.querySelectorAll("img");
+          console.log("에디터 내 이미지 개수:", images.length);
+
+          // 이미지가 없고 원본에 이미지가 있으면 직접 추가
+          if (images.length === 0 && imgMatches && imgMatches.length > 0) {
+            console.log("이미지를 직접 추가합니다");
+            imgMatches.forEach((imgTag) => {
+              // 임시 div를 만들어서 이미지 태그를 파싱
+              const tempDiv = document.createElement("div");
+              tempDiv.innerHTML = imgTag;
+              const img = tempDiv.querySelector("img");
+              if (img) {
+                // 이미지 스타일 적용
+                img.style.maxWidth = "100%";
+                img.style.height = "auto";
+                img.style.display = "block";
+                img.style.margin = "1rem 0";
+
+                // 에디터에 추가
+                editorElement.appendChild(img);
+                console.log("이미지 추가됨:", img.outerHTML);
+              }
+            });
+          }
+        }
+      }, 100);
     }
   }, [value, editor]);
+
+  // data- 속성 처리
+  useApplyMarkDataColor([value], document);
 
   const setTextColor = useCallback(
     (color: string) => {
