@@ -1,5 +1,17 @@
 {
   "dependencies": {
-    "axios": "^1.9.0"
+    "@tiptap/extension-color": "^2.23.0",
+    "@tiptap/extension-highlight": "^2.23.0",
+    "@tiptap/extension-image": "^2.23.0",
+    "@tiptap/extension-table": "^2.23.0",
+    "@tiptap/extension-text-align": "^2.23.0",
+    "@tiptap/extension-text-style": "^2.23.0",
+    "@tiptap/extension-underline": "^2.23.0",
+    "@tiptap/react": "^2.23.0",
+    "@tiptap/starter-kit": "^2.23.0",
+    "axios": "^1.10.0",
+    "react": "^19.1.0",
+    "react-colorful": "^5.6.1",
+    "react-dom": "^19.1.0"
   }
 }

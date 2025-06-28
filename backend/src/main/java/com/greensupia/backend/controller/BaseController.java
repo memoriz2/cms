@@ -10,10 +10,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.greensupia.backend.util.FileUtil;
 
 @Component
+@RestController
 public class BaseController {
     
+    @Autowired
+    private FileUtil fileUtil;
+
     protected Pageable createPageable(int page, int size, String sortBy, String sortDir){
         Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortBy);
         return PageRequest.of(page,size,sort);
@@ -34,5 +42,17 @@ public class BaseController {
         errorResponse.put("error", "Internal Server Error");
         errorResponse.put("message", "서버 내부 오류가 발생했습니다.");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+
+    // 게시판/에디터용 이미지 업로드
+    @PostMapping("/api/uploads/board")
+    public ResponseEntity<?> uploadBoardImage(@RequestParam("file") MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "파일이 없습니다."));
+        }
+        String filePath = fileUtil.saveFile(file, "board");
+        // URL 경로만 반환 (윈도우/리눅스 경로 구분 처리)
+        String url = "/" + filePath.replace("\\", "/");
+        return ResponseEntity.ok(Map.of("url", url));
     }
 }

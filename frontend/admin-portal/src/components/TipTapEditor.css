@@ -48,6 +48,8 @@
   font-size: 15px;
   border-radius: 6px;
   padding: 4px 8px;
+  min-width: 80px;
+  cursor: pointer;
 }
 
 .color-picker-popover {
@@ -57,14 +59,16 @@
   background: #fff;
   border: 1px solid #e0e0e0;
   position: absolute;
-  z-index: 10;
+  z-index: 9999;
   top: 36px;
   left: 0;
+  pointer-events: auto;
 }
 
 .color-picker-container {
   position: relative;
   display: inline-block;
+  pointer-events: auto;
 }
 
 .color-option {
@@ -96,6 +100,12 @@
   outline: 2px solid #90caf9;
 }
 
+/* color 속성을 가진 mark 태그의 배경색 설정 */
+.tiptap mark[color] {
+  background-color: var(--mark-color) !important;
+  color: inherit !important;
+}
+
 .tiptap table {
   border-collapse: collapse;
   width: 100%;
@@ -111,4 +121,67 @@
 }
 .tiptap th {
   background: #f5f5f5;
+}
+
+/* 이미지 가운데 정렬 */
+.tiptap img {
+  display: block !important;
+  margin: 1rem auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  text-align: center !important;
+}
+
+/* 에디터 이미지 스타일 */
+.editor-image {
+  display: block !important;
+  margin: 1rem auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 이미지 컨테이너 가운데 정렬 */
+.tiptap .image-container {
+  text-align: center !important;
+  margin: 1rem 0 !important;
+}
+
+.tiptap .image-container img {
+  display: inline-block !important;
+  margin: 0 auto !important;
+}
+
+/* 모든 이미지 요소에 대해 가운데 정렬 강제 적용 */
+.tiptap p:has(img),
+.tiptap div:has(img) {
+  text-align: center !important;
+}
+
+.tiptap p img,
+.tiptap div img {
+  display: inline-block !important;
+  margin: 0 auto !important;
+}
+
+.toolbar-select {
+  background: #f7f7f7;
+  border: 1px solid #d0d0d0;
+  font-size: 14px;
+  border-radius: 6px;
+  padding: 6px 8px;
+  min-width: 100px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.toolbar-select:hover {
+  border-color: #1976d2;
+}
+
+.toolbar-select:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
 }

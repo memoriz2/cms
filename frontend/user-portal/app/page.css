@@ -19,6 +19,101 @@
   display: block;
 }
 
+/* 인사말 섹션 */
+.greeting-section {
+  margin-bottom: 40px;
+  padding: 40px 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.greeting-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.greeting-content {
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.8;
+  color: #555;
+  text-align: left;
+}
+
+.greeting-content h1,
+.greeting-content h2,
+.greeting-content h3 {
+  color: #333;
+  margin: 1.5rem 0 1rem 0;
+  font-weight: bold;
+}
+
+.greeting-content h1 {
+  font-size: 1.8rem;
+}
+
+.greeting-content h2 {
+  font-size: 1.5rem;
+}
+
+.greeting-content h3 {
+  font-size: 1.3rem;
+}
+
+.greeting-content p {
+  margin: 1rem 0;
+}
+
+.greeting-content ul,
+.greeting-content ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.greeting-content li {
+  margin: 0.5rem 0;
+}
+
+.greeting-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 8px;
+}
+
+.greeting-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.greeting-content th,
+.greeting-content td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.greeting-content th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.greeting-content a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.greeting-content a:hover {
+  text-decoration: underline;
+}
+
 /* 비디오 섹션 */
 .video-section {
   background: #f8f9fa;
@@ -84,6 +179,26 @@
     padding: 10px;
   }
 
+  .greeting-section {
+    padding: 30px 20px;
+  }
+
+  .greeting-title {
+    font-size: 1.5rem;
+  }
+
+  .greeting-content h1 {
+    font-size: 1.5rem;
+  }
+
+  .greeting-content h2 {
+    font-size: 1.3rem;
+  }
+
+  .greeting-content h3 {
+    font-size: 1.1rem;
+  }
+
   .video-section {
     padding: 20px;
   }
@@ -94,6 +209,18 @@
 }
 
 @media (max-width: 480px) {
+  .greeting-section {
+    padding: 20px 15px;
+  }
+
+  .greeting-title {
+    font-size: 1.3rem;
+  }
+
+  .greeting-content {
+    font-size: 0.9rem;
+  }
+
   .video-section {
     padding: 15px;
   }

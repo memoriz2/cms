@@ -63,6 +63,14 @@ public class GreetingService {
         throw new RuntimeException("Greeting not found with id: " + id);
     }
 
+    public EditorContentResponse getFirstActiveGreeting() {
+        List<Greeting> activeGreetings = greetingRepository.findByIsActiveTrue();
+        if (activeGreetings.isEmpty()) {
+            throw new RuntimeException("활성화된 인사말이 없습니다.");
+        }
+        return convertToResponse(activeGreetings.get(0));
+    }
+
     private EditorContentResponse convertToResponse(Greeting greeting) {
         EditorContentResponse response = new EditorContentResponse();
         response.setId(greeting.getId());

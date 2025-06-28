@@ -26,11 +26,21 @@ interface Banner {
   updatedAt: string;
 }
 
+interface Greeting {
+  id: number;
+  title: string;
+  content: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export default function Home() {
   const [video, setVideo] = useState<Video | null>(null);
   const [banner, setBanner] = useState<Banner | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [greeting, setGreeting] = useState<Greeting | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,6 +69,19 @@ export default function Home() {
           videoResponse.data.content.length > 0
         ) {
           setVideo(videoResponse.data.content[0]);
+        }
+
+        // 인사말 데이터 가져오기
+        try {
+          const greetingResponse = await axios.get(
+            `${API_URL}/api/greetings/active`
+          );
+          if (greetingResponse.data) {
+            setGreeting(greetingResponse.data);
+          }
+        } catch (greetingError) {
+          console.log("인사말 데이터를 불러올 수 없습니다:", greetingError);
+          // 인사말이 없어도 계속 진행
         }
       } catch (error) {
         console.error("데이터를 불러오는데 실패했습니다:", error);
@@ -110,7 +133,15 @@ export default function Home() {
         </section>
       )}
       {/* {인사말 섹션} */}
-      <section className="greeting-section"></section>
+      {greeting && (
+        <section className="greeting-section">
+          <h2 className="greeting-title">{greeting.title}</h2>
+          <div
+            className="greeting-content"
+            dangerouslySetInnerHTML={{ __html: greeting.content }}
+          />
+        </section>
+      )}
       {/* 비디오 섹션 */}
       <section className="video-section">
         {video ? (

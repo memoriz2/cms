@@ -1,80 +1,58 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
-import Strike from "@tiptap/extension-strike";
-import Link from "@tiptap/extension-link";
-import TextStyle from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
 import Highlight from "@tiptap/extension-highlight";
-import TextAlign from "@tiptap/extension-text-align";
+import TextStyle from "@tiptap/extension-text-style";
 import Table from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
-import { SketchPicker, ColorResult } from "react-color";
+import TextAlign from "@tiptap/extension-text-align";
+import ImageResize from "tiptap-extension-resize-image";
+import { HexColorPicker } from "react-colorful";
 import "./TipTapEditor.css";
-import Image from "@tiptap/extension-image";
-import ResizeImage from "tiptap-extension-resize-image";
-import sanitizeHtml from "sanitize-html";
 
-// 폰트 패밀리 커스텀 익스텐션
-import { Extension } from "@tiptap/core";
-
-const FontFamily = Extension.create({
-  name: "fontFamily",
-  addOptions() {
+// 커스텀 FontFamily 확장
+const FontFamily = TextStyle.extend({
+  addAttributes() {
     return {
-      types: ["textStyle"],
-    };
-  },
-  addGlobalAttributes() {
-    return [
-      {
-        types: this.options.types,
-        attributes: {
-          fontFamily: {
-            default: null,
-            parseHTML: (element) =>
-              element.style.fontFamily.replace(/['"]/g, "") || null,
-            renderHTML: (attributes) => {
-              if (!attributes.fontFamily) {
-                return {};
-              }
-              return {
-                style: `font-family: ${attributes.fontFamily}`,
-              };
-            },
-          },
+      ...this.parent?.(),
+      fontFamily: {
+        default: null,
+        parseHTML: (element) => element.style.fontFamily,
+        renderHTML: (attributes) => {
+          if (!attributes.fontFamily) {
+            return {};
+          }
+          return {
+            style: `font-family: ${attributes.fontFamily}`,
+          };
         },
       },
-    ];
+    };
   },
 });
 
-const FontSize = Extension.create({
-  name: "fontSize",
-  addGlobalAttributes() {
-    return [
-      {
-        types: ["textStyle"],
-        attributes: {
-          fontSize: {
-            default: null,
-            parseHTML: (element) =>
-              element.style.fontSize?.replace(/['"]/g, "") || null,
-            renderHTML: (attributes) => {
-              if (!attributes.fontSize) {
-                return {};
-              }
-              return {
-                style: `font-size: ${attributes.fontSize}`,
-              };
-            },
-          },
+// 커스텀 FontSize 확장
+const FontSize = TextStyle.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      fontSize: {
+        default: null,
+        parseHTML: (element) => element.style.fontSize,
+        renderHTML: (attributes) => {
+          if (!attributes.fontSize) {
+            return {};
+          }
+          return {
+            style: `font-size: ${attributes.fontSize}`,
+          };
         },
       },
-    ];
+    };
   },
 });
 
@@ -83,319 +61,297 @@ interface TipTapEditorProps {
   onChange: (value: string) => void;
 }
 
-const fontList = [
-  { label: "기본", value: "" },
-  { label: "Arial", value: "Arial" },
-  { label: "나눔고딕", value: "Nanum Gothic" },
-  { label: "굴림", value: "Gulim" },
-  { label: "맑은 고딕", value: "Malgun Gothic" },
-  { label: "Serif", value: "serif" },
-  { label: "Monospace", value: "monospace" },
-];
-
-const fontSizeList = [
-  { label: "기본", value: "" },
-  { label: "12px", value: "12px" },
-  { label: "14px", value: "14px" },
-  { label: "16px", value: "16px" },
-  { label: "18px", value: "18px" },
-  { label: "20px", value: "20px" },
-  { label: "24px", value: "24px" },
-  { label: "28px", value: "28px" },
-  { label: "32px", value: "32px" },
-];
-
 const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [showHighlightPicker, setShowHighlightPicker] = useState(false);
   const [color, setColor] = useState("#000000");
   const [highlightColor, setHighlightColor] = useState("#ffff00");
-  const colorPickerRef = useRef<HTMLDivElement>(null);
-  const highlightPickerRef = useRef<HTMLDivElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFont, setSelectedFont] = useState("Arial");
+  const [selectedFontSize, setSelectedFontSize] = useState("16px");
 
-  // 팝오버 바깥 클릭 시 닫힘
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({ strike: {}, code: false }),
+      TextStyle,
+      Color,
+      Highlight.configure({ multicolor: true }),
+      FontFamily,
+      FontSize,
+      Underline,
+      ImageResize,
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableCell,
+      TableHeader,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+    ],
+    content: value || "<p></p>",
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+  });
+
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        showColorPicker &&
-        colorPickerRef.current &&
-        !colorPickerRef.current.contains(event.target as Node)
-      ) {
-        setShowColorPicker(false);
+    if (!editor) return;
+    const currentEditorHtml = editor.getHTML();
+    if (currentEditorHtml !== value) {
+      let processedValue = value;
+      if (value) {
+        processedValue = value
+          .replace(/\s+data-color="[^"]*"/g, "")
+          .replace(/\s+data-highlight="[^"]*"/g, "")
+          .replace(/\s+data-font-family="[^"]*"/g, "")
+          .replace(/\s+data-font-size="[^"]*"/g, "");
       }
-      if (
-        showHighlightPicker &&
-        highlightPickerRef.current &&
-        !highlightPickerRef.current.contains(event.target as Node)
-      ) {
+      editor.commands.setContent(processedValue || "<p></p>", false);
+    }
+  }, [value, editor]);
+
+  const setTextColor = useCallback(
+    (color: string) => {
+      if (editor) {
+        editor.chain().focus().setColor(color).run();
+      }
+    },
+    [editor]
+  );
+
+  const applyHighlightColor = useCallback(
+    (color: string) => {
+      if (editor) {
+        editor.chain().focus().setHighlight({ color }).run();
+      }
+    },
+    [editor]
+  );
+
+  useEffect(() => {
+    const handlePaste = (event: Event) => {
+      const clipboardEvent = event as ClipboardEvent;
+      const items = clipboardEvent.clipboardData?.items;
+      if (!items) return;
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (item.type.indexOf("image") !== -1) {
+          const blob = item.getAsFile();
+          if (blob) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              editor
+                ?.chain()
+                .focus()
+                .setImage({ src: e.target?.result as string })
+                .run();
+            };
+            reader.readAsDataURL(blob);
+            event.preventDefault();
+            break;
+          }
+        }
+      }
+    };
+    const editorElement = document.querySelector(".tiptap");
+    if (editorElement) {
+      editorElement.addEventListener("paste", handlePaste);
+      return () => {
+        editorElement.removeEventListener("paste", handlePaste);
+      };
+    }
+  }, [editor]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      const isColorPickerOpen = showColorPicker || showHighlightPicker;
+      if (!isColorPickerOpen) return;
+      const colorPickerPopovers = document.querySelectorAll(
+        ".color-picker-popover"
+      );
+      let isInsidePopover = false;
+      colorPickerPopovers.forEach((popover) => {
+        if (popover.contains(target)) {
+          isInsidePopover = true;
+        }
+      });
+      if (!isInsidePopover) {
+        setShowColorPicker(false);
         setShowHighlightPicker(false);
       }
-    }
-    if (showColorPicker || showHighlightPicker) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showColorPicker, showHighlightPicker]);
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      TextStyle,
-      Color,
-      Highlight.configure({ multicolor: true }),
-      FontSize,
-      Underline,
-      Strike,
-      Link.configure({ autolink: true, openOnClick: true, linkOnPaste: true }),
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
-      Table.configure({ resizable: true }),
-      TableRow,
-      TableHeader,
-      TableCell,
-      FontFamily,
-      Image,
-      ResizeImage,
-    ],
-    content: value,
-    onUpdate: ({ editor }) => {
-      const html = editor.getHTML();
-      const sanitizedHtml = sanitizeHtml(html, {
-        allowedTags: [
-          "b",
-          "i",
-          "u",
-          "s",
-          "a",
-          "p",
-          "ul",
-          "ol",
-          "li",
-          "br",
-          "span",
-          "div",
-          "img",
-          "table",
-          "thead",
-          "tbody",
-          "tr",
-          "th",
-          "td",
-          "h1",
-          "h2",
-          "h3",
-        ],
-        allowedAttributes: {
-          a: ["href", "target", "rel"],
-          img: ["src", "width", "height", "alt", "style"],
-          span: ["style"],
-          div: ["style"],
-          "*": ["style", "class"],
-        },
-        allowedSchemes: ["http", "https", "data"],
-      });
-      onChange(sanitizedHtml);
-    },
-  });
-
-  const handleFontChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    editor
-      ?.chain()
-      .focus()
-      .setMark("textStyle", { fontFamily: e.target.value })
-      .run();
-  };
-
-  // 파일 업로드 핸들러
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const base64 = event.target?.result as string;
-      editor?.chain().focus().setImage({ src: base64 }).run();
-    };
-    reader.readAsDataURL(file);
-  };
-
-  useEffect(() => {
-    if (!editor) return;
-    const handlePaste = (event: ClipboardEvent) => {
-      if (!event.clipboardData) return;
-      const items = event.clipboardData.items;
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-        if (item.type.indexOf("image") !== -1) {
-          const file = item.getAsFile();
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              const base64 = e.target?.result as string;
-              editor.chain().focus().setImage({ src: base64 }).run();
-            };
-            reader.readAsDataURL(file);
-          }
-          event.preventDefault();
-        }
-      }
-    };
-    const dom = editor.view.dom;
-    dom.addEventListener("paste", handlePaste);
-    return () => {
-      dom.removeEventListener("paste", handlePaste);
-    };
-  }, [editor]);
-
   return (
-    <div>
+    <div className="tiptap-editor">
       <div className="editor-toolbar">
-        {/* 글꼴 선택 */}
+        {/* 폰트 패밀리 */}
         <select
-          onChange={handleFontChange}
-          value={editor?.getAttributes("textStyle").fontFamily || ""}
+          value={selectedFont}
+          onChange={(e) => {
+            setSelectedFont(e.target.value);
+            if (e.target.value) {
+              editor
+                ?.chain()
+                .focus()
+                .setMark("textStyle", { fontFamily: e.target.value })
+                .run();
+            } else {
+              editor?.chain().focus().unsetMark("textStyle").run();
+            }
+          }}
+          className="toolbar-select"
+          title="폰트"
         >
-          {fontList.map((font) => (
-            <option key={font.value} value={font.value}>
-              {font.label}
-            </option>
-          ))}
+          <option value="">기본</option>
+          <option value="Arial">Arial</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Courier New">Courier New</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Verdana">Verdana</option>
+          <option value="Helvetica">Helvetica</option>
+          <option value="Comic Sans MS">Comic Sans MS</option>
+          <option value="Impact">Impact</option>
         </select>
-        {/* 폰트 크기 선택 */}
+        {/* 글자 크기 */}
         <select
-          onChange={(e) =>
-            editor
-              ?.chain()
-              .focus()
-              .setMark("textStyle", { fontSize: e.target.value })
-              .run()
-          }
-          value={editor?.getAttributes("textStyle").fontSize || ""}
+          value={selectedFontSize}
+          onChange={(e) => {
+            setSelectedFontSize(e.target.value);
+            if (e.target.value) {
+              editor
+                ?.chain()
+                .focus()
+                .setMark("textStyle", { fontSize: e.target.value })
+                .run();
+            } else {
+              editor?.chain().focus().unsetMark("textStyle").run();
+            }
+          }}
+          className="toolbar-select"
+          title="글자 크기"
         >
-          {fontSizeList.map((size) => (
-            <option key={size.value} value={size.value}>
-              {size.label}
-            </option>
-          ))}
+          <option value="">기본</option>
+          <option value="8px">8px</option>
+          <option value="10px">10px</option>
+          <option value="12px">12px</option>
+          <option value="14px">14px</option>
+          <option value="16px">16px</option>
+          <option value="18px">18px</option>
+          <option value="20px">20px</option>
+          <option value="24px">24px</option>
+          <option value="28px">28px</option>
+          <option value="32px">32px</option>
+          <option value="36px">36px</option>
+          <option value="48px">48px</option>
         </select>
-        <button
-          type="button"
-          onClick={() => editor?.chain().focus().toggleBold().run()}
-          className={editor?.isActive("bold") ? "is-active" : ""}
-        >
-          <b>B</b>
-        </button>
-        <button
-          type="button"
-          onClick={() => editor?.chain().focus().toggleItalic().run()}
-          className={editor?.isActive("italic") ? "is-active" : ""}
-        >
-          <i>I</i>
-        </button>
-        <button
-          type="button"
-          onClick={() => editor?.chain().focus().toggleUnderline().run()}
-          className={editor?.isActive("underline") ? "is-active" : ""}
-        >
-          <u>U</u>
-        </button>
-        <button
-          type="button"
-          onClick={() => editor?.chain().focus().toggleStrike().run()}
-          className={editor?.isActive("strike") ? "is-active" : ""}
-        >
-          <s>S</s>
-        </button>
-        <button
-          type="button"
-          onClick={() => editor?.chain().focus().toggleBulletList().run()}
-          className={editor?.isActive("bulletList") ? "is-active" : ""}
-        >
-          • •
-        </button>
-        {/* 컬러피커 */}
-        <div className="color-picker-container" ref={colorPickerRef}>
+        {/* 텍스트 색상 */}
+        <div className="color-picker-container">
           <button
             type="button"
-            onClick={() => setShowColorPicker(!showColorPicker)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowColorPicker(!showColorPicker);
+            }}
+            className="toolbar-button"
+            style={{ backgroundColor: color, color: "#fff" }}
+            title="텍스트 색상"
           >
             A
           </button>
           {showColorPicker && (
-            <div className="color-picker-popover">
-              <SketchPicker
-                color={color}
-                onChangeComplete={(c: ColorResult) => {
-                  setColor(c.hex);
-                  editor?.chain().focus().setColor(c.hex).run();
+            <div
+              className="color-picker-popover"
+              onClick={(e) => e.stopPropagation()}
+              onMouseDown={(e) => e.stopPropagation()}
+              onMouseUp={(e) => e.stopPropagation()}
+            >
+              <HexColorPicker color={color} onChange={setColor} />
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setTextColor(color);
+                  setShowColorPicker(false);
                 }}
-              />
+              >
+                적용
+              </button>
             </div>
           )}
         </div>
-        {/* 형광펜 컬러피커 */}
-        <div className="color-picker-container" ref={highlightPickerRef}>
+        {/* 하이라이트 */}
+        <div className="color-picker-container">
           <button
             type="button"
-            onClick={() => setShowHighlightPicker(!showHighlightPicker)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowHighlightPicker(!showHighlightPicker);
+            }}
+            className="toolbar-button"
+            title="하이라이트"
+            style={{ background: highlightColor }}
           >
-            <span
-              style={{
-                background: "#ffff00",
-                padding: "0 4px",
-                borderRadius: "2px",
-              }}
-            >
-              H
-            </span>
+            <span style={{ background: highlightColor }}>H</span>
           </button>
           {showHighlightPicker && (
-            <div className="color-picker-popover">
-              <SketchPicker
+            <div
+              className="color-picker-popover"
+              onClick={(e) => e.stopPropagation()}
+              onMouseDown={(e) => e.stopPropagation()}
+              onMouseUp={(e) => e.stopPropagation()}
+            >
+              <HexColorPicker
                 color={highlightColor}
-                onChangeComplete={(c: ColorResult) => {
-                  setHighlightColor(c.hex);
-                  editor
-                    ?.chain()
-                    .focus()
-                    .toggleHighlight({ color: c.hex })
-                    .run();
-                }}
+                onChange={setHighlightColor}
               />
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  applyHighlightColor(highlightColor);
+                  setShowHighlightPicker(false);
+                }}
+              >
+                적용
+              </button>
             </div>
           )}
         </div>
+        {/* 굵게 */}
         <button
-          type="button"
-          onClick={() => editor?.chain().focus().setTextAlign("left").run()}
+          onClick={() => editor?.chain().focus().toggleBold().run()}
+          className="toolbar-button"
+          title="굵게"
         >
-          ⯇
+          <b>B</b>
         </button>
+        {/* 기울임 */}
         <button
-          type="button"
-          onClick={() => editor?.chain().focus().setTextAlign("center").run()}
+          onClick={() => editor?.chain().focus().toggleItalic().run()}
+          className="toolbar-button"
+          title="기울임"
         >
-          ≡
+          <i>I</i>
         </button>
+        {/* 밑줄 */}
         <button
-          type="button"
-          onClick={() => editor?.chain().focus().setTextAlign("right").run()}
+          onClick={() => editor?.chain().focus().toggleUnderline().run()}
+          className="toolbar-button"
+          title="밑줄"
         >
-          ⯈
+          <u>U</u>
         </button>
-        <button type="button" onClick={() => fileInputRef.current?.click()}>
-          🖼️
-        </button>
-        <input
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          style={{ display: "none" }}
-          onChange={handleImageUpload}
-        />
+        {/* 취소선 */}
         <button
-          type="button"
+          onClick={() => editor?.chain().focus().toggleStrike().run()}
+          className="toolbar-button"
+          title="취소선"
+        >
+          <s>S</s>
+        </button>
+        {/* 표 삽입 */}
+        <button
           onClick={() =>
             editor
               ?.chain()
@@ -403,72 +359,41 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
               .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
               .run()
           }
+          className="toolbar-button"
           title="표 삽입"
         >
-          <svg width="20" height="20" viewBox="0 0 20 20">
-            <rect
-              x="2"
-              y="2"
-              width="16"
-              height="16"
-              fill="none"
-              stroke="#333"
-              strokeWidth="1.5"
-            />
-            <line x1="2" y1="8" x2="18" y2="8" stroke="#333" strokeWidth="1" />
-            <line
-              x1="2"
-              y1="14"
-              x2="18"
-              y2="14"
-              stroke="#333"
-              strokeWidth="1"
-            />
-            <line x1="8" y1="2" x2="8" y2="18" stroke="#333" strokeWidth="1" />
-            <line
-              x1="14"
-              y1="2"
-              x2="14"
-              y2="18"
-              stroke="#333"
-              strokeWidth="1"
-            />
-          </svg>
+          표
         </button>
+        {/* 이미지 업로드 */}
+        <input
+          type="file"
+          id="img-upload"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = (ev) => {
+                editor
+                  ?.chain()
+                  .focus()
+                  .setImage({ src: ev.target?.result as string })
+                  .run();
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
+        />
         <button
-          type="button"
-          onClick={() => editor?.chain().focus().addColumnBefore().run()}
+          onClick={() => document.getElementById("img-upload")?.click()}
+          className="toolbar-button"
+          title="이미지 삽입"
         >
-          ↔
-        </button>
-        <button
-          type="button"
-          onClick={() => editor?.chain().focus().addRowBefore().run()}
-        >
-          ↕
-        </button>
-        <button
-          type="button"
-          onClick={() => editor?.chain().focus().deleteTable().run()}
-        >
-          ❌
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            editor
-              ?.chain()
-              .focus()
-              .insertContent(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque euismod, nisi vel consectetur euismod, nisl nisi consectetur nisi, euismod euismod nisi nisi euismod."
-              )
-              .run()
-          }
-        >
-          Lorem
+          🖼️
         </button>
       </div>
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} className="tiptap" />
     </div>
   );
 };
