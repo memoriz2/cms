@@ -38,16 +38,33 @@ public class GreetingService {
     }
 
     public EditorContentResponse updateGreeting(Long id, EditorContentRequest request) {
+        System.out.println("=== updateGreeting 메서드 호출 ===");
+        System.out.println("수정할 ID: " + id);
+        System.out.println("요청 데이터 - 제목: " + request.getTitle());
+        System.out.println("요청 데이터 - 내용: " + request.getContent());
+        System.out.println("요청 데이터 - 활성화: " + request.getIsActive());
+        
         Optional<Greeting> optionalGreeting = greetingRepository.findById(id);
         if (optionalGreeting.isPresent()) {
             Greeting greeting = optionalGreeting.get();
+            System.out.println("기존 데이터 - 제목: " + greeting.getTitle());
+            System.out.println("기존 데이터 - 내용: " + greeting.getContent());
+            System.out.println("기존 데이터 - 활성화: " + greeting.getIsActive());
+            
             greeting.setTitle(request.getTitle());
             greeting.setContent(request.getContent());
             greeting.setIsActive(request.getIsActive());
             
+            System.out.println("업데이트 후 데이터 - 제목: " + greeting.getTitle());
+            System.out.println("업데이트 후 데이터 - 내용: " + greeting.getContent());
+            System.out.println("업데이트 후 데이터 - 활성화: " + greeting.getIsActive());
+            
             Greeting updatedGreeting = greetingRepository.save(greeting);
+            System.out.println("저장 완료 - ID: " + updatedGreeting.getId());
+            
             return convertToResponse(updatedGreeting);
         }
+        System.out.println("Greeting을 찾을 수 없음 - ID: " + id);
         throw new RuntimeException("Greeting not found with id: " + id);
     }
 

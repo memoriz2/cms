@@ -36,7 +36,21 @@ public class GreetingController extends BaseController {
 
     @PutMapping("/{id}")
     public EditorContentResponse updateGreeting(@PathVariable Long id, @RequestBody EditorContentRequest request) {
-        return greetingService.updateGreeting(id, request);
+        System.out.println("=== updateGreeting 컨트롤러 호출 ===");
+        System.out.println("요청 ID: " + id);
+        System.out.println("요청 객체: " + request);
+        System.out.println("요청 제목: " + (request != null ? request.getTitle() : "null"));
+        System.out.println("요청 내용: " + (request != null ? request.getContent() : "null"));
+        System.out.println("요청 활성화: " + (request != null ? request.getIsActive() : "null"));
+        
+        EditorContentResponse response = greetingService.updateGreeting(id, request);
+        System.out.println("=== 컨트롤러 응답 ===");
+        System.out.println("응답 ID: " + response.getId());
+        System.out.println("응답 제목: " + response.getTitle());
+        System.out.println("응답 내용: " + response.getContent());
+        System.out.println("응답 활성화: " + response.getIsActive());
+        
+        return response;
     }
 
     @DeleteMapping("/{id}")

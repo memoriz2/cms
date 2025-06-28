@@ -29,13 +29,27 @@ const GreetingManagement: React.FC = () => {
   });
 
   const getGreetings = async () => {
+    console.log("=== 인사말 목록 불러오기 시작 ===");
     setLoading(true);
     try {
-      const response = await fetch(`${API_ENDPOINTS.GREETINGS}/list`);
-      const data = await response.json();
-      setGreetings(data.content || []);
+      const response = await fetch(
+        `${API_ENDPOINTS.GREETINGS}/list?size=10&page=0`
+      );
+      console.log("목록 요청 응답 상태:", response.status);
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("목록 응답 데이터:", data);
+        console.log("목록의 첫 번째 항목:", data.content?.[0]);
+        console.log("목록의 첫 번째 항목 제목:", data.content?.[0]?.title);
+        console.log("목록의 첫 번째 항목 내용:", data.content?.[0]?.content);
+        setGreetings(data.content || []);
+        console.log("설정된 인사말 목록:", data.content || []);
+      } else {
+        console.error("목록 불러오기 실패:", response.status);
+      }
     } catch (error) {
-      console.error("Error fetching greetings:", error);
+      console.error("목록 불러오기 에러:", error);
     } finally {
       setLoading(false);
     }
@@ -66,7 +80,18 @@ const GreetingManagement: React.FC = () => {
   };
 
   const handleUpdateGreeting = async () => {
-    if (!editingId) return;
+    if (!editingId) {
+      console.error("editingId가 없습니다!");
+      return;
+    }
+
+    console.log("=== 인사말 수정 시작 ===");
+    console.log("editingId:", editingId);
+    console.log("수정할 데이터:", addFormData);
+    console.log("API 엔드포인트:", `${API_ENDPOINTS.GREETINGS}/${editingId}`);
+
+    const requestBody = JSON.stringify(addFormData);
+    console.log("요청 본문:", requestBody);
 
     try {
       const response = await fetch(`${API_ENDPOINTS.GREETINGS}/${editingId}`, {
@@ -74,18 +99,33 @@ const GreetingManagement: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(addFormData),
+        body: requestBody,
       });
 
+      console.log("서버 응답 상태:", response.status);
+      console.log(
+        "서버 응답 헤더:",
+        Object.fromEntries(response.headers.entries())
+      );
+
       if (response.ok) {
+        console.log("수정 성공!");
+        const responseData = await response.json();
+        console.log("서버 응답 데이터:", responseData);
+        console.log("수정된 제목:", responseData.title);
+        console.log("수정된 내용:", responseData.content);
         setShowAddForm(false);
         setAddFormData({ title: "", content: "", isActive: false });
         setIsEditing(false);
         setEditingId(null);
         getGreetings();
+      } else {
+        console.error("수정 실패 - 응답 상태:", response.status);
+        const errorText = await response.text();
+        console.error("에러 내용:", errorText);
       }
     } catch (error) {
-      console.error("Error updating greeting:", error);
+      console.error("수정 중 에러 발생:", error);
     }
   };
 
@@ -289,7 +329,18 @@ const GreetingManagement: React.FC = () => {
               className="modal-form"
               onSubmit={(e) => {
                 e.preventDefault();
-                isEditing ? handleUpdateGreeting() : handleAddGreeting();
+                console.log("=== 폼 제출 이벤트 발생 ===");
+                console.log("isEditing:", isEditing);
+                console.log("editingId:", editingId);
+                console.log("현재 폼 데이터:", addFormData);
+
+                if (isEditing) {
+                  console.log("수정 함수 호출");
+                  handleUpdateGreeting();
+                } else {
+                  console.log("추가 함수 호출");
+                  handleAddGreeting();
+                }
               }}
             >
               <div className="form-group">

@@ -125,103 +125,27 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
     },
   });
 
-  // 커서 강제 생성 함수
-  const forceCursor = useCallback(() => {
-    if (!editor) return;
-
-    console.log("=== 커서 강제 생성 시작 ===");
-
-    try {
-      // 1. 에디터 포커스
-      editor.commands.focus();
-      console.log("1. 에디터 포커스 완료");
-
-      // 2. 잠시 대기 후 다시 포커스
-      setTimeout(() => {
-        editor.commands.focus();
-        console.log("2. 재포커스 완료");
-
-        // 3. 커서를 끝으로 이동
-        const docSize = editor.state.doc.content.size;
-        editor.commands.setTextSelection(docSize);
-        console.log("3. 커서를 끝으로 이동 완료, 위치:", docSize);
-
-        // 4. DOM에서 직접 커서 생성 시도
-        setTimeout(() => {
-          const editorElement = document.querySelector(".tiptap");
-          if (editorElement) {
-            // contenteditable 강제 설정
-            editorElement.setAttribute("contenteditable", "true");
-            editorElement.removeAttribute("readonly");
-            editorElement.removeAttribute("readOnly");
-
-            // 포커스 강제
-            (editorElement as HTMLElement).focus();
-
-            // 커서 스타일 강제 적용
-            (editorElement as HTMLElement).style.caretColor = "#000";
-            (editorElement as HTMLElement).style.cursor = "text";
-
-            console.log("4. DOM 직접 조작 완료");
-
-            // 5. 마지막으로 에디터 커서 위치 확인
-            setTimeout(() => {
-              const { from, to } = editor.state.selection;
-              console.log("5. 최종 커서 위치:", { from, to });
-
-              // 커서가 없으면 다시 설정
-              if (from === to && from === 0) {
-                editor.commands.setTextSelection(docSize);
-                console.log("6. 커서 재설정 완료");
-              }
-            }, 50);
-          }
-        }, 100);
-      }, 50);
-    } catch (error) {
-      console.error("커서 강제 생성 실패:", error);
-    }
-  }, [editor]);
-
   // 에디터 클릭 시 포커스
-  const handleEditorClick = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      forceCursor();
-    },
-    [forceCursor]
-  );
+  const handleEditorClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // forceCursor() 호출 제거 - 클릭 이벤트 중복 방지
+  }, []);
 
   // 에디터 영역 클릭 시 포커스
   const handleEditorAreaClick = useCallback(() => {
-    forceCursor();
-  }, [forceCursor]);
-
-  // 키보드 이벤트 처리
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      forceCursor();
-    },
-    [forceCursor]
-  );
-
-  // 마우스 다운 이벤트로 포커스
-  const handleMouseDown = useCallback(
-    (e: React.MouseEvent) => {
-      forceCursor();
-    },
-    [forceCursor]
-  );
+    // forceCursor() 호출 제거 - 클릭 이벤트 중복 방지
+  }, []);
 
   // 에디터 준비 상태 변경 시 커서 강제 생성
   useEffect(() => {
     if (isEditorReady) {
-      setTimeout(() => {
-        forceCursor();
-      }, 200);
+      // forceCursor 호출 제거 - 중복 방지
+      // setTimeout(() => {
+      //   forceCursor();
+      // }, 200);
     }
-  }, [isEditorReady, forceCursor]);
+  }, [isEditorReady]);
 
   useEffect(() => {
     if (!editor) return;
@@ -297,10 +221,10 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
         }
 
         // 에디터 다시 포커스
-        forceCursor();
+        // forceCursor();
       }, 300);
     }
-  }, [value, editor, forceCursor]);
+  }, [value, editor]);
 
   // data- 속성 처리
   useApplyMarkDataColor([value], document);
@@ -396,7 +320,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
 
     // 에디터 포커스 및 커서 강제 생성
     setTimeout(() => {
-      forceCursor();
+      // forceCursor();
     }, 100);
 
     // 에디터 업데이트 이벤트 리스너
@@ -412,7 +336,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
     return () => {
       editor.off("update", handleUpdate);
     };
-  }, [editor, isEditorReady, value, onChange, forceCursor]);
+  }, [editor, isEditorReady, value, onChange]);
 
   return (
     <div className="tiptap-editor">
@@ -616,8 +540,6 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
       <div
         ref={editorRef}
         onClick={handleEditorAreaClick}
-        onMouseDown={handleMouseDown}
-        onKeyDown={handleKeyDown}
         style={{ cursor: "text" }}
         className="editor-container"
         tabIndex={0}
