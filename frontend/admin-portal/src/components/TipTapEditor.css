@@ -88,7 +88,6 @@
 /* 에디터 컨테이너 */
 .editor-container {
   position: relative;
-  cursor: text;
   outline: none;
 }
 
@@ -898,4 +897,77 @@
 /* 글자 크기가 적용된 텍스트에서도 텍스트 커서 유지 */
 .ProseMirror [style*="font-size"] {
   cursor: text;
+}
+
+/* 툴바 스타일 */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 10px;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  cursor: default;
+}
+
+.toolbar button {
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 40px;
+  justify-content: center;
+}
+
+.toolbar button:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.toolbar button.active {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.toolbar button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toolbar select {
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  min-width: 100px;
+}
+
+.toolbar input[type="color"] {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  cursor: pointer;
+  background: none;
+}
+
+.toolbar input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.toolbar input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 3px;
 }
