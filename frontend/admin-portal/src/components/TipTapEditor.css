@@ -832,3 +832,70 @@
 .ProseMirror img.ProseMirror-selectednode {
   cursor: pointer;
 }
+
+/* 한글 글꼴 추가 */
+@font-face {
+  font-family: "맑은 고딕";
+  src: local("Malgun Gothic");
+}
+
+@font-face {
+  font-family: "Malgun Gothic";
+  src: local("Malgun Gothic");
+}
+
+@font-face {
+  font-family: "궁서체";
+  src: local("Batang");
+}
+
+@font-face {
+  font-family: "Batang";
+  src: local("Batang");
+}
+
+@font-face {
+  font-family: "굴림체";
+  src: local("Gulim");
+}
+
+@font-face {
+  font-family: "Gulim";
+  src: local("Gulim");
+}
+
+@font-face {
+  font-family: "바탕체";
+  src: local("Dotum");
+}
+
+@font-face {
+  font-family: "Dotum";
+  src: local("Dotum");
+}
+
+@font-face {
+  font-family: "돋움체";
+  src: local("Dotum");
+}
+
+/* 굵게, 기울임, 밑줄 등이 적용된 텍스트에서도 텍스트 커서 유지 */
+.ProseMirror strong,
+.ProseMirror b,
+.ProseMirror em,
+.ProseMirror i,
+.ProseMirror u,
+.ProseMirror s,
+.ProseMirror strike {
+  cursor: text;
+}
+
+/* 한글 글꼴이 적용된 텍스트에서도 텍스트 커서 유지 */
+.ProseMirror [style*="font-family"] {
+  cursor: text;
+}
+
+/* 글자 크기가 적용된 텍스트에서도 텍스트 커서 유지 */
+.ProseMirror [style*="font-size"] {
+  cursor: text;
+}

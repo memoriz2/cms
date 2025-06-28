@@ -164,7 +164,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
   const setTextColor = useCallback(
     (color: string) => {
       if (editor) {
-        editor.chain().focus().setColor(color).run();
+        editor.chain().setColor(color).run();
       }
     },
     [editor]
@@ -173,7 +173,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
   const applyHighlightColor = useCallback(
     (color: string) => {
       if (editor) {
-        editor.chain().focus().setHighlight({ color }).run();
+        editor.chain().setHighlight({ color }).run();
       }
     },
     [editor]
@@ -308,14 +308,16 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
           value={selectedFont}
           onChange={(e) => {
             setSelectedFont(e.target.value);
+            console.log("폰트 변경:", e.target.value);
             if (e.target.value) {
               editor
                 ?.chain()
-                .focus()
                 .setMark("textStyle", { fontFamily: e.target.value })
                 .run();
+              console.log("폰트 적용 완료");
             } else {
-              editor?.chain().focus().unsetMark("textStyle").run();
+              editor?.chain().unsetMark("textStyle").run();
+              console.log("폰트 제거 완료");
             }
           }}
           className="toolbar-select"
@@ -330,19 +332,30 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
           <option value="Helvetica">Helvetica</option>
           <option value="Comic Sans MS">Comic Sans MS</option>
           <option value="Impact">Impact</option>
+          <option value="맑은 고딕">맑은 고딕</option>
+          <option value="Malgun Gothic">Malgun Gothic</option>
+          <option value="궁서체">궁서체</option>
+          <option value="Batang">Batang</option>
+          <option value="굴림체">굴림체</option>
+          <option value="Gulim">Gulim</option>
+          <option value="바탕체">바탕체</option>
+          <option value="Dotum">Dotum</option>
+          <option value="돋움체">돋움체</option>
         </select>
         <select
           value={selectedFontSize}
           onChange={(e) => {
             setSelectedFontSize(e.target.value);
+            console.log("글자 크기 변경:", e.target.value);
             if (e.target.value) {
               editor
                 ?.chain()
-                .focus()
                 .setMark("textStyle", { fontSize: e.target.value })
                 .run();
+              console.log("글자 크기 적용 완료");
             } else {
-              editor?.chain().focus().unsetMark("textStyle").run();
+              editor?.chain().unsetMark("textStyle").run();
+              console.log("글자 크기 제거 완료");
             }
           }}
           className="toolbar-select"
@@ -432,41 +445,69 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
           )}
         </div>
         <button
-          onClick={() => editor?.chain().focus().toggleBold().run()}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log("굵게 버튼 클릭");
+            editor?.chain().toggleBold().run();
+            console.log("굵게 적용 완료");
+          }}
           className="toolbar-button"
           title="굵게"
         >
           <b>B</b>
         </button>
         <button
-          onClick={() => editor?.chain().focus().toggleItalic().run()}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log("기울임 버튼 클릭");
+            editor?.chain().toggleItalic().run();
+            console.log("기울임 적용 완료");
+          }}
           className="toolbar-button"
           title="기울임"
         >
           <i>I</i>
         </button>
         <button
-          onClick={() => editor?.chain().focus().toggleUnderline().run()}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log("밑줄 버튼 클릭");
+            editor?.chain().toggleUnderline().run();
+            console.log("밑줄 적용 완료");
+          }}
           className="toolbar-button"
           title="밑줄"
         >
           <u>U</u>
         </button>
         <button
-          onClick={() => editor?.chain().focus().toggleStrike().run()}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log("취소선 버튼 클릭");
+            editor?.chain().toggleStrike().run();
+            console.log("취소선 적용 완료");
+          }}
           className="toolbar-button"
           title="취소선"
         >
           <s>S</s>
         </button>
         <button
-          onClick={() =>
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log("표 삽입 버튼 클릭");
             editor
               ?.chain()
               .focus()
               .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-              .run()
-          }
+              .run();
+            console.log("표 삽입 완료");
+          }}
           className="toolbar-button"
           title="표 삽입"
         >
@@ -474,8 +515,8 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
         </button>
         <button
           onClick={(e) => {
-            e.stopPropagation(); // 모달이 닫히는 것을 방지
-            e.preventDefault(); // 기본 동작 방지
+            e.stopPropagation();
+            e.preventDefault();
             console.log("이미지 업로드 버튼 클릭됨");
 
             // 파일 input을 직접 클릭하는 대신 새로운 input을 생성
