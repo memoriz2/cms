@@ -176,16 +176,25 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
 
   useEffect(() => {
     const handlePaste = (event: Event) => {
+      console.log("=== Paste 이벤트 발생 ===");
       const clipboardEvent = event as ClipboardEvent;
       const items = clipboardEvent.clipboardData?.items;
+      console.log("클립보드 아이템:", items);
+
       if (!items) return;
+
       for (let i = 0; i < items.length; i++) {
         const item = items[i];
+        console.log(`아이템 ${i}:`, item.type);
+
         if (item.type.indexOf("image") !== -1) {
+          console.log("이미지 발견!");
           const blob = item.getAsFile();
           if (blob) {
+            console.log("이미지 파일:", blob);
             const reader = new FileReader();
             reader.onload = (e) => {
+              console.log("이미지 로드 완료:", e.target?.result);
               editor
                 ?.chain()
                 .focus()
@@ -199,11 +208,16 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
         }
       }
     };
-    const editorElement = document.querySelector(".tiptap");
-    if (editorElement) {
+
+    // 에디터 요소에 직접 이벤트 리스너 추가
+    if (editor) {
+      const editorElement = editor.view.dom;
       editorElement.addEventListener("paste", handlePaste);
+      console.log("Paste 이벤트 리스너 등록됨");
+
       return () => {
         editorElement.removeEventListener("paste", handlePaste);
+        console.log("Paste 이벤트 리스너 제거됨");
       };
     }
   }, [editor]);
@@ -435,10 +449,13 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
           accept="image/*"
           style={{ display: "none" }}
           onChange={(e) => {
+            e.stopPropagation(); // 모달이 닫히는 것을 방지
             const file = e.target.files?.[0];
             if (file) {
+              console.log("파일 선택됨:", file);
               const reader = new FileReader();
               reader.onload = (ev) => {
+                console.log("파일 로드 완료:", ev.target?.result);
                 editor
                   ?.chain()
                   .focus()
@@ -447,10 +464,15 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
               };
               reader.readAsDataURL(file);
             }
+            // 파일 선택 후 input 초기화
+            e.target.value = "";
           }}
         />
         <button
-          onClick={() => document.getElementById("img-upload")?.click()}
+          onClick={(e) => {
+            e.stopPropagation();
+            document.getElementById("img-upload")?.click();
+          }}
           className="toolbar-button"
           title="이미지 삽입"
         >
