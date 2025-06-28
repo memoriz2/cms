@@ -268,6 +268,16 @@ const GreetingManagement: React.FC = () => {
                               img.removeAttribute("data-image");
                             }
                           );
+
+                          // 일반적인 img 태그도 처리
+                          el.querySelectorAll("img").forEach((img) => {
+                            if (!img.hasAttribute("data-image")) {
+                              (img as HTMLElement).style.maxWidth = "100%";
+                              (img as HTMLElement).style.height = "auto";
+                              (img as HTMLElement).style.display = "block";
+                              (img as HTMLElement).style.margin = "1rem 0";
+                            }
+                          });
                         }, 0);
                       }
                     }}
@@ -286,7 +296,17 @@ const GreetingManagement: React.FC = () => {
       {showAddForm && (
         <div
           className="modal-overlay"
-          onClick={() => {
+          onClick={(e) => {
+            // 이미지 업로드 관련 요소 클릭 시 모달 닫기 방지
+            const target = e.target as HTMLElement;
+            if (
+              target.closest(".tiptap-editor") ||
+              target.closest("#img-upload") ||
+              target.closest('button[title="이미지 삽입"]')
+            ) {
+              return;
+            }
+
             setShowAddForm(false);
             setIsEditing(false);
             setEditingId(null);

@@ -88,7 +88,7 @@
 /* 에디터 컨테이너 */
 .editor-container {
   position: relative;
-  cursor: text !important;
+  cursor: text;
   outline: none;
 }
 
@@ -102,25 +102,25 @@
   padding: 20px;
   min-height: 300px;
   background: white;
-  cursor: text !important;
+  cursor: text;
   position: relative;
   z-index: 1;
 }
 
 .tiptap:focus {
-  outline: 2px solid #90caf9 !important;
+  outline: 2px solid #90caf9;
   outline-offset: -2px;
 }
 
 .tiptap:focus-within {
-  outline: 2px solid #90caf9 !important;
+  outline: 2px solid #90caf9;
   outline-offset: -2px;
 }
 
 /* ProseMirror 관련 스타일 */
 .ProseMirror {
-  outline: none !important;
-  cursor: text !important;
+  outline: none;
+  cursor: text;
   position: relative;
   word-wrap: break-word;
   white-space: pre-wrap;
@@ -137,16 +137,16 @@
 }
 
 .ProseMirror * {
-  cursor: text !important;
+  cursor: text;
 }
 
 .ProseMirror:focus {
-  outline: none !important;
+  outline: none;
 }
 
 .ProseMirror p {
   margin: 1em 0;
-  cursor: text !important;
+  cursor: text;
   min-width: 1px;
 }
 
@@ -159,8 +159,8 @@
 
 /* color 속성을 가진 mark 태그의 배경색 설정 */
 .tiptap mark[color] {
-  background-color: var(--mark-color) !important;
-  color: inherit !important;
+  background-color: var(--mark-color);
+  color: inherit;
 }
 
 .tiptap table {
@@ -182,44 +182,45 @@
 
 /* 이미지 가운데 정렬 */
 .tiptap img {
-  display: block !important;
-  margin: 1rem auto !important;
-  max-width: 100% !important;
-  height: auto !important;
-  text-align: center !important;
+  display: block;
+  margin: 1rem auto;
+  max-width: 100%;
+  height: auto;
+  text-align: center;
+  cursor: pointer;
 }
 
 /* 에디터 이미지 스타일 */
 .editor-image {
-  display: block !important;
-  margin: 1rem auto !important;
-  max-width: 100% !important;
-  height: auto !important;
-  border-radius: 6px !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  display: block;
+  margin: 1rem auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* 이미지 컨테이너 가운데 정렬 */
 .tiptap .image-container {
-  text-align: center !important;
-  margin: 1rem 0 !important;
+  text-align: center;
+  margin: 1rem 0;
 }
 
 .tiptap .image-container img {
-  display: inline-block !important;
-  margin: 0 auto !important;
+  display: inline-block;
+  margin: 0 auto;
 }
 
 /* 모든 이미지 요소에 대해 가운데 정렬 강제 적용 */
 .tiptap p:has(img),
 .tiptap div:has(img) {
-  text-align: center !important;
+  text-align: center;
 }
 
 .tiptap p img,
 .tiptap div img {
-  display: inline-block !important;
-  margin: 0 auto !important;
+  display: inline-block;
+  margin: 0 auto;
 }
 
 .toolbar-select {
@@ -260,22 +261,22 @@
 /* 에디터 내 모든 요소에 커서 적용 */
 .tiptap *,
 .tiptap-editor * {
-  cursor: text !important;
+  cursor: text;
 }
 
 /* contenteditable 요소 강제 스타일 */
 [contenteditable="true"] {
-  cursor: text !important;
-  outline: none !important;
-  caret-color: #1976d2 !important;
+  cursor: text;
+  outline: none;
+  caret-color: #1976d2;
 }
 
 [contenteditable="true"]:focus {
-  outline: none !important;
+  outline: none;
 }
 
 [contenteditable="true"] * {
-  cursor: text !important;
+  cursor: text;
 }
 
 /* 빈 에디터에 대한 처리 */
@@ -288,34 +289,34 @@
 /* 커서 강제 표시 */
 .tiptap *:focus,
 .ProseMirror *:focus {
-  outline: none !important;
+  outline: none;
 }
 
 /* 에디터 내 모든 텍스트 요소에 커서 적용 */
 .tiptap *,
 .ProseMirror * {
-  cursor: text !important;
+  cursor: text;
 }
 
 /* 특별히 커서가 필요한 요소들 */
 .tiptap .ProseMirror,
 .ProseMirror {
-  cursor: text !important;
-  outline: none !important;
+  cursor: text;
+  outline: none;
 }
 
 .tiptap .ProseMirror *,
 .ProseMirror * {
-  cursor: text !important;
+  cursor: text;
 }
 
 /* 에디터 내 모든 클릭 가능한 영역 */
 .tiptap-editor .editor-container {
-  cursor: text !important;
+  cursor: text;
 }
 
 .tiptap-editor .editor-container * {
-  cursor: text !important;
+  cursor: text;
 }
 
 /* 키보드 포커스 스타일 */
@@ -327,7 +328,7 @@
 /* 에디터 내 모든 포커스 가능한 요소 */
 .tiptap *:focus,
 .ProseMirror *:focus {
-  outline: none !important;
+  outline: none;
 }
 
 .tiptap-editor {
@@ -417,13 +418,13 @@
   position: relative;
   min-height: 300px;
   background: white;
-  cursor: text !important;
+  cursor: text;
 }
 
 /* ProseMirror 관련 스타일 강화 */
 .ProseMirror {
-  outline: none !important;
-  cursor: text !important;
+  outline: none;
+  cursor: text;
   position: relative;
   word-wrap: break-word;
   white-space: pre-wrap;
@@ -441,7 +442,7 @@
 
 .ProseMirror p {
   margin: 1em 0;
-  cursor: text !important;
+  cursor: text;
   min-width: 1px;
 }
 
@@ -452,7 +453,7 @@
 .ProseMirror h5,
 .ProseMirror h6 {
   margin: 1em 0 0.5em 0;
-  cursor: text !important;
+  cursor: text;
   min-width: 1px;
 }
 
@@ -460,7 +461,7 @@
   border-left: 3px solid #ddd;
   margin: 1em 0;
   padding-left: 1em;
-  cursor: text !important;
+  cursor: text;
   min-width: 1px;
 }
 
@@ -470,7 +471,7 @@
   padding: 1em;
   margin: 1em 0;
   overflow-x: auto;
-  cursor: text !important;
+  cursor: text;
   min-width: 1px;
 }
 
@@ -479,7 +480,7 @@
   padding: 2px 4px;
   border-radius: 3px;
   font-family: monospace;
-  cursor: text !important;
+  cursor: text;
   min-width: 1px;
 }
 
@@ -487,13 +488,13 @@
 .ProseMirror ol {
   margin: 1em 0;
   padding-left: 2em;
-  cursor: text !important;
+  cursor: text;
   min-width: 1px;
 }
 
 .ProseMirror li {
   margin: 0.5em 0;
-  cursor: text !important;
+  cursor: text;
   min-width: 1px;
 }
 
@@ -501,7 +502,7 @@
   border-collapse: collapse;
   margin: 1em 0;
   width: 100%;
-  cursor: text !important;
+  cursor: text;
   min-width: 1px;
 }
 
@@ -509,14 +510,14 @@
 .ProseMirror table th {
   border: 1px solid #ddd;
   padding: 8px;
-  cursor: text !important;
+  cursor: text;
   min-width: 1px;
 }
 
 .ProseMirror table th {
   background: #f5f5f5;
   font-weight: bold;
-  cursor: text !important;
+  cursor: text;
   min-width: 1px;
 }
 
@@ -525,12 +526,12 @@
   height: auto;
   display: block;
   margin: 1em 0;
-  cursor: text !important;
+  cursor: text;
 }
 
 /* 커서 관련 스타일 강화 */
 .ProseMirror * {
-  cursor: text !important;
+  cursor: text;
 }
 
 .ProseMirror .is-editor-empty:first-child::before {
@@ -539,26 +540,26 @@
   float: left;
   height: 0;
   pointer-events: none;
-  cursor: text !important;
+  cursor: text;
 }
 
 /* 포커스 상태 강화 */
 .ProseMirror:focus {
-  outline: none !important;
-  cursor: text !important;
+  outline: none;
+  cursor: text;
 }
 
 .ProseMirror:focus * {
-  cursor: text !important;
+  cursor: text;
 }
 
 /* 편집 가능한 요소들 */
 .ProseMirror[contenteditable="true"] {
-  cursor: text !important;
+  cursor: text;
 }
 
 .ProseMirror[contenteditable="true"] * {
-  cursor: text !important;
+  cursor: text;
 }
 
 /* 커서 위치 표시 */
@@ -569,7 +570,7 @@
   background: #000;
   margin-left: -1px;
   animation: blink 1s infinite;
-  cursor: text !important;
+  cursor: text;
   min-width: 2px;
 }
 
@@ -587,21 +588,21 @@
 /* 선택 영역 스타일 */
 .ProseMirror ::selection {
   background: #b3d4fc;
-  cursor: text !important;
+  cursor: text;
 }
 
 .ProseMirror ::-moz-selection {
   background: #b3d4fc;
-  cursor: text !important;
+  cursor: text;
 }
 
 /* 드래그 가능한 요소들 */
 .ProseMirror img[data-drag-handle] {
-  cursor: move !important;
+  cursor: pointer;
 }
 
 .ProseMirror .resize-handle {
-  cursor: nw-resize !important;
+  cursor: pointer;
 }
 
 /* 테이블 관련 */
@@ -619,7 +620,7 @@
   pointer-events: none;
   position: absolute;
   z-index: 2;
-  cursor: text !important;
+  cursor: text;
 }
 
 .ProseMirror table .column-resize-handle {
@@ -630,33 +631,33 @@
   pointer-events: none;
   top: 0;
   width: 4px;
-  cursor: col-resize !important;
+  cursor: col-resize;
 }
 
 .ProseMirror table p {
   margin: 0;
-  cursor: text !important;
+  cursor: text;
   min-width: 1px;
 }
 
 /* 이미지 리사이즈 관련 */
 .ProseMirror img.ProseMirror-selectednode {
   outline: 2px solid #68cef8;
-  cursor: text !important;
+  cursor: text;
 }
 
 .ProseMirror .image-resizer {
   display: inline-flex;
   position: relative;
   flex-grow: 0;
-  cursor: text !important;
+  cursor: pointer;
 }
 
 .ProseMirror .image-resizer img {
   max-width: 100%;
   height: auto;
   object-fit: contain;
-  cursor: text !important;
+  cursor: pointer;
 }
 
 .ProseMirror .image-resizer .resize-trigger {
@@ -669,19 +670,23 @@
   border-radius: 2px;
   background-color: white;
   pointer-events: all;
-  cursor: nw-resize !important;
+  cursor: pointer;
+}
+
+.ProseMirror .image-resizer .resize-trigger:hover {
+  cursor: pointer;
 }
 
 /* 링크 스타일 */
 .ProseMirror a {
   color: #007bff;
   text-decoration: underline;
-  cursor: pointer !important;
+  cursor: pointer;
 }
 
 .ProseMirror a:hover {
   color: #0056b3;
-  cursor: pointer !important;
+  cursor: pointer;
 }
 
 /* 하이라이트 스타일 */
@@ -689,84 +694,84 @@
   background: #ffeb3b;
   padding: 0.1em 0.2em;
   border-radius: 2px;
-  cursor: text !important;
+  cursor: text;
 }
 
 /* 색상 스타일 */
 .ProseMirror .has-text-color {
-  cursor: text !important;
+  cursor: text;
 }
 
 /* 폰트 스타일 */
 .ProseMirror .has-font-family {
-  cursor: text !important;
+  cursor: text;
 }
 
 .ProseMirror .has-font-size {
-  cursor: text !important;
+  cursor: text;
 }
 
 /* 텍스트 정렬 */
 .ProseMirror .text-left {
   text-align: left;
-  cursor: text !important;
+  cursor: text;
 }
 
 .ProseMirror .text-center {
   text-align: center;
-  cursor: text !important;
+  cursor: text;
 }
 
 .ProseMirror .text-right {
   text-align: right;
-  cursor: text !important;
+  cursor: text;
 }
 
 .ProseMirror .text-justify {
   text-align: justify;
-  cursor: text !important;
+  cursor: text;
 }
 
 /* 편집기 전체에 대한 커서 강제 설정 */
 .tiptap-editor * {
-  cursor: text !important;
+  cursor: text;
 }
 
 .tiptap-editor .editor-container {
-  cursor: text !important;
+  cursor: text;
 }
 
 .tiptap-editor .editor-container * {
-  cursor: text !important;
+  cursor: text;
 }
 
 /* readonly 속성이 있는 경우 제거 */
 .ProseMirror[readonly],
 .ProseMirror[readOnly] {
-  cursor: text !important;
+  cursor: text;
 }
 
 .ProseMirror[readonly] *,
 .ProseMirror[readOnly] * {
-  cursor: text !important;
+  cursor: text;
 }
 
 /* contenteditable이 false인 경우 강제로 true로 */
 .ProseMirror[contenteditable="false"] {
-  cursor: text !important;
+  cursor: text;
 }
 
 .ProseMirror[contenteditable="false"] * {
-  cursor: text !important;
+  cursor: text;
 }
 
 /* 편집 가능한 상태 강제 */
 .ProseMirror[contenteditable="true"] {
-  cursor: text !important;
-  user-select: text !important;
-  -webkit-user-select: text !important;
-  -moz-user-select: text !important;
-  -ms-user-select: text !important;
+  cursor: text;
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
 }
 
 /* 모든 텍스트 요소에 커서 강제 */
@@ -779,10 +784,51 @@
 .ProseMirror h4,
 .ProseMirror h5,
 .ProseMirror h6 {
-  cursor: text !important;
-  user-select: text !important;
-  -webkit-user-select: text !important;
-  -moz-user-select: text !important;
-  -ms-user-select: text !important;
+  cursor: text;
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
   min-width: 1px;
+}
+
+/* 이미지 리사이즈 관련 커서 스타일 */
+.tiptap .image-resizer {
+  cursor: pointer;
+}
+
+.tiptap .image-resizer .resize-trigger {
+  cursor: pointer;
+}
+
+.tiptap .image-resizer .resize-trigger:hover {
+  cursor: pointer;
+}
+
+/* 드래그 핸들에 포인터 커서 적용 */
+.tiptap img[data-drag-handle] {
+  cursor: pointer;
+}
+
+/* 리사이즈 핸들에 포인터 커서 적용 */
+.tiptap .resize-handle {
+  cursor: pointer;
+}
+
+/* 이미지 리사이즈 시 적절한 커서 스타일 */
+.ProseMirror .image-resizer {
+  cursor: pointer;
+}
+
+.ProseMirror .image-resizer .resize-trigger {
+  cursor: pointer;
+}
+
+.ProseMirror .image-resizer .resize-trigger:hover {
+  cursor: pointer;
+}
+
+/* 이미지 선택 시 커서 스타일 */
+.ProseMirror img.ProseMirror-selectednode {
+  cursor: pointer;
 }

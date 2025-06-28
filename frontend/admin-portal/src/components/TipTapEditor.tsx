@@ -443,35 +443,49 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
         >
           표
         </button>
-        <input
-          type="file"
-          id="img-upload"
-          accept="image/*"
-          style={{ display: "none" }}
-          onChange={(e) => {
-            e.stopPropagation(); // 모달이 닫히는 것을 방지
-            const file = e.target.files?.[0];
-            if (file) {
-              console.log("파일 선택됨:", file);
-              const reader = new FileReader();
-              reader.onload = (ev) => {
-                console.log("파일 로드 완료:", ev.target?.result);
-                editor
-                  ?.chain()
-                  .focus()
-                  .setImage({ src: ev.target?.result as string })
-                  .run();
-              };
-              reader.readAsDataURL(file);
-            }
-            // 파일 선택 후 input 초기화
-            e.target.value = "";
-          }}
-        />
         <button
           onClick={(e) => {
+            e.stopPropagation(); // 모달이 닫히는 것을 방지
+            e.preventDefault(); // 기본 동작 방지
+            console.log("이미지 업로드 버튼 클릭됨");
+
+            // 파일 input을 직접 클릭하는 대신 새로운 input을 생성
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = "image/*";
+            input.style.display = "none";
+
+            input.onchange = (event) => {
+              const target = event.target as HTMLInputElement;
+              const file = target.files?.[0];
+              if (file) {
+                console.log("파일 선택됨:", file);
+                console.log("파일 타입:", file.type);
+                console.log("파일 크기:", file.size);
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                  console.log("파일 로드 완료:", ev.target?.result);
+                  console.log("에디터 상태:", editor);
+                  editor
+                    ?.chain()
+                    .focus()
+                    .setImage({ src: ev.target?.result as string })
+                    .run();
+                  console.log("이미지 삽입 명령 실행됨");
+                };
+                reader.readAsDataURL(file);
+              } else {
+                console.log("선택된 파일이 없음");
+              }
+            };
+
+            document.body.appendChild(input);
+            input.click();
+            document.body.removeChild(input);
+          }}
+          onMouseDown={(e) => {
             e.stopPropagation();
-            document.getElementById("img-upload")?.click();
+            e.preventDefault();
           }}
           className="toolbar-button"
           title="이미지 삽입"
