@@ -126,16 +126,11 @@ export default function Home() {
         <div
           className="banner-image"
           style={{
-            width: "100%",
-            height: "240px",
             backgroundImage: bannerBackgroundImage,
             backgroundColor:
               banner && banner.filePath && banner.filePath.trim() !== ""
                 ? "transparent"
                 : "#e9ecef",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
           }}
           title={banner && banner.title ? banner.title : "배너 이미지"}
         />
