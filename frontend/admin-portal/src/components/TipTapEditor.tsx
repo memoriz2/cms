@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -13,6 +13,9 @@ import TextAlign from "@tiptap/extension-text-align";
 import ImageResize from "tiptap-extension-resize-image";
 import { HexColorPicker } from "react-colorful";
 import { useApplyMarkDataColor } from "../hooks/useApplyMarkDataColor";
+import Link from "@tiptap/extension-link";
+import Image from "@tiptap/extension-image";
+import { Editor } from "@tiptap/core";
 import "./TipTapEditor.css";
 
 // 커스텀 FontFamily 확장
@@ -69,10 +72,15 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
   const [highlightColor, setHighlightColor] = useState("#ffff00");
   const [selectedFont, setSelectedFont] = useState("Arial");
   const [selectedFontSize, setSelectedFontSize] = useState("16px");
+  const editorRef = useRef<HTMLDivElement>(null);
+  const [isEditorReady, setIsEditorReady] = useState(false);
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({ strike: {}, code: false }),
+      StarterKit.configure({
+        strike: {},
+        code: false,
+      }),
       TextStyle,
       Color,
       Highlight.configure({ multicolor: true }),
@@ -85,12 +93,135 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
       TableCell,
       TableHeader,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
+      Link,
+      Image,
     ],
-    content: value || "<p></p>",
+    content: value || "<p>여기에 텍스트를 입력하세요...</p>",
+    editable: true,
+    autofocus: true,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      const html = editor.getHTML();
+      onChange(html);
+    },
+    onFocus: ({ editor }) => {
+      console.log("에디터 포커스됨");
+      setIsEditorReady(true);
+    },
+    onBlur: ({ editor }) => {
+      console.log("에디터 블러됨");
+    },
+    onCreate: ({ editor }) => {
+      console.log("에디터 생성됨");
+      // 생성 후 강제 포커스
+      setTimeout(() => {
+        try {
+          editor.commands.focus();
+          setIsEditorReady(true);
+          console.log("에디터 생성 후 포커스 설정됨");
+        } catch (error) {
+          console.error("에디터 생성 후 포커스 실패:", error);
+        }
+      }, 100);
     },
   });
+
+  // 커서 강제 생성 함수
+  const forceCursor = useCallback(() => {
+    if (!editor) return;
+
+    console.log("=== 커서 강제 생성 시작 ===");
+
+    try {
+      // 1. 에디터 포커스
+      editor.commands.focus();
+      console.log("1. 에디터 포커스 완료");
+
+      // 2. 잠시 대기 후 다시 포커스
+      setTimeout(() => {
+        editor.commands.focus();
+        console.log("2. 재포커스 완료");
+
+        // 3. 커서를 끝으로 이동
+        const docSize = editor.state.doc.content.size;
+        editor.commands.setTextSelection(docSize);
+        console.log("3. 커서를 끝으로 이동 완료, 위치:", docSize);
+
+        // 4. DOM에서 직접 커서 생성 시도
+        setTimeout(() => {
+          const editorElement = document.querySelector(".tiptap");
+          if (editorElement) {
+            // contenteditable 강제 설정
+            editorElement.setAttribute("contenteditable", "true");
+            editorElement.removeAttribute("readonly");
+            editorElement.removeAttribute("readOnly");
+
+            // 포커스 강제
+            (editorElement as HTMLElement).focus();
+
+            // 커서 스타일 강제 적용
+            (editorElement as HTMLElement).style.caretColor = "#000";
+            (editorElement as HTMLElement).style.cursor = "text";
+
+            console.log("4. DOM 직접 조작 완료");
+
+            // 5. 마지막으로 에디터 커서 위치 확인
+            setTimeout(() => {
+              const { from, to } = editor.state.selection;
+              console.log("5. 최종 커서 위치:", { from, to });
+
+              // 커서가 없으면 다시 설정
+              if (from === to && from === 0) {
+                editor.commands.setTextSelection(docSize);
+                console.log("6. 커서 재설정 완료");
+              }
+            }, 50);
+          }
+        }, 100);
+      }, 50);
+    } catch (error) {
+      console.error("커서 강제 생성 실패:", error);
+    }
+  }, [editor]);
+
+  // 에디터 클릭 시 포커스
+  const handleEditorClick = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      forceCursor();
+    },
+    [forceCursor]
+  );
+
+  // 에디터 영역 클릭 시 포커스
+  const handleEditorAreaClick = useCallback(() => {
+    forceCursor();
+  }, [forceCursor]);
+
+  // 키보드 이벤트 처리
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      forceCursor();
+    },
+    [forceCursor]
+  );
+
+  // 마우스 다운 이벤트로 포커스
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      forceCursor();
+    },
+    [forceCursor]
+  );
+
+  // 에디터 준비 상태 변경 시 커서 강제 생성
+  useEffect(() => {
+    if (isEditorReady) {
+      setTimeout(() => {
+        forceCursor();
+      }, 200);
+    }
+  }, [isEditorReady, forceCursor]);
 
   useEffect(() => {
     if (!editor) return;
@@ -109,8 +240,34 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
         });
       }
 
+      // 커서 위치 저장
+      const { from, to } = editor.state.selection;
+
       // 원본 HTML을 그대로 설정
-      editor.commands.setContent(value || "<p></p>", false);
+      editor.commands.setContent(
+        value || "<p>여기에 텍스트를 입력하세요...</p>",
+        false
+      );
+
+      // 커서 위치 복원 (끝으로 강제 이동하지 않음)
+      setTimeout(() => {
+        try {
+          // 원래 위치가 유효하면 복원, 아니면 끝으로
+          if (
+            from <= editor.state.doc.content.size &&
+            to <= editor.state.doc.content.size
+          ) {
+            editor.commands.setTextSelection({ from, to });
+          } else {
+            editor.commands.setTextSelection(editor.state.doc.content.size);
+          }
+          console.log("커서 위치 복원 완료");
+        } catch (error) {
+          console.error("커서 위치 복원 실패:", error);
+          // 실패 시 끝으로 이동
+          editor.commands.setTextSelection(editor.state.doc.content.size);
+        }
+      }, 10);
 
       // 에디터가 렌더링된 후 이미지가 없으면 직접 DOM에 추가
       setTimeout(() => {
@@ -138,9 +295,12 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
             console.log("이미지가 직접 DOM에 추가됨, 개수:", newImages.length);
           }
         }
-      }, 300); // 시간을 더 늘려서 에디터가 완전히 렌더링된 후 실행
+
+        // 에디터 다시 포커스
+        forceCursor();
+      }, 300);
     }
-  }, [value, editor]);
+  }, [value, editor, forceCursor]);
 
   // data- 속성 처리
   useApplyMarkDataColor([value], document);
@@ -222,10 +382,41 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
     };
   }, [showColorPicker, showHighlightPicker]);
 
+  // 에디터 초기화
+  useEffect(() => {
+    if (!editor || !isEditorReady) return;
+
+    console.log("=== 에디터 초기화 ===");
+
+    // 초기 콘텐츠 설정
+    if (value) {
+      editor.commands.setContent(value, false);
+      console.log("초기 콘텐츠 설정 완료");
+    }
+
+    // 에디터 포커스 및 커서 강제 생성
+    setTimeout(() => {
+      forceCursor();
+    }, 100);
+
+    // 에디터 업데이트 이벤트 리스너
+    const handleUpdate = ({ editor }: { editor: Editor }) => {
+      const html = editor.getHTML();
+      if (html !== value) {
+        onChange(html);
+      }
+    };
+
+    editor.on("update", handleUpdate);
+
+    return () => {
+      editor.off("update", handleUpdate);
+    };
+  }, [editor, isEditorReady, value, onChange, forceCursor]);
+
   return (
     <div className="tiptap-editor">
       <div className="editor-toolbar">
-        {/* 폰트 패밀리 */}
         <select
           value={selectedFont}
           onChange={(e) => {
@@ -253,7 +444,6 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
           <option value="Comic Sans MS">Comic Sans MS</option>
           <option value="Impact">Impact</option>
         </select>
-        {/* 글자 크기 */}
         <select
           value={selectedFontSize}
           onChange={(e) => {
@@ -285,7 +475,6 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
           <option value="36px">36px</option>
           <option value="48px">48px</option>
         </select>
-        {/* 텍스트 색상 */}
         <div className="color-picker-container">
           <button
             type="button"
@@ -319,7 +508,6 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
             </div>
           )}
         </div>
-        {/* 하이라이트 */}
         <div className="color-picker-container">
           <button
             type="button"
@@ -356,7 +544,6 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
             </div>
           )}
         </div>
-        {/* 굵게 */}
         <button
           onClick={() => editor?.chain().focus().toggleBold().run()}
           className="toolbar-button"
@@ -364,7 +551,6 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
         >
           <b>B</b>
         </button>
-        {/* 기울임 */}
         <button
           onClick={() => editor?.chain().focus().toggleItalic().run()}
           className="toolbar-button"
@@ -372,7 +558,6 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
         >
           <i>I</i>
         </button>
-        {/* 밑줄 */}
         <button
           onClick={() => editor?.chain().focus().toggleUnderline().run()}
           className="toolbar-button"
@@ -380,7 +565,6 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
         >
           <u>U</u>
         </button>
-        {/* 취소선 */}
         <button
           onClick={() => editor?.chain().focus().toggleStrike().run()}
           className="toolbar-button"
@@ -388,7 +572,6 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
         >
           <s>S</s>
         </button>
-        {/* 표 삽입 */}
         <button
           onClick={() =>
             editor
@@ -402,7 +585,6 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
         >
           표
         </button>
-        {/* 이미지 업로드 */}
         <input
           type="file"
           id="img-upload"
@@ -431,7 +613,17 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
           🖼️
         </button>
       </div>
-      <EditorContent editor={editor} className="tiptap" />
+      <div
+        ref={editorRef}
+        onClick={handleEditorAreaClick}
+        onMouseDown={handleMouseDown}
+        onKeyDown={handleKeyDown}
+        style={{ cursor: "text" }}
+        className="editor-container"
+        tabIndex={0}
+      >
+        <EditorContent editor={editor} className="tiptap" />
+      </div>
     </div>
   );
 };
