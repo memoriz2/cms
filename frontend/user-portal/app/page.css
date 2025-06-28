@@ -8,40 +8,47 @@
 /* 배너 섹션 */
 .banner-section {
   margin-bottom: 40px;
-  border-radius: 12px;
+  border-radius: 0;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
+  padding: 0;
 }
 
 .banner-image {
   width: 100%;
-  height: auto;
+  height: 240px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 0;
   display: block;
 }
 
 /* 인사말 섹션 */
 .greeting-section {
   margin-bottom: 40px;
-  padding: 40px 30px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 60px 0 40px 0;
+  background: #fff;
+  border-radius: 0;
+  box-shadow: none;
   text-align: center;
+  width: 100%;
 }
 
 .greeting-title {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: bold;
   color: #333;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .greeting-content {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   line-height: 1.8;
   color: #555;
   text-align: left;
+  font-size: 1.1rem;
 }
 
 .greeting-content h1,
@@ -117,15 +124,16 @@
 /* 비디오 섹션 */
 .video-section {
   background: #f8f9fa;
-  border-radius: 12px;
-  padding: 30px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 0;
+  padding: 60px 0 40px 0;
+  box-shadow: none;
+  width: 100%;
 }
 
 .video-container {
   position: relative;
   width: 100%;
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -147,9 +155,9 @@
 }
 
 .video-title {
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: bold;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   color: #333;
 }
 
@@ -178,31 +186,18 @@
   .main-container {
     padding: 10px;
   }
-
   .greeting-section {
-    padding: 30px 20px;
+    padding: 30px 0 20px 0;
   }
-
   .greeting-title {
     font-size: 1.5rem;
   }
-
-  .greeting-content h1 {
-    font-size: 1.5rem;
+  .greeting-content {
+    font-size: 1rem;
   }
-
-  .greeting-content h2 {
-    font-size: 1.3rem;
-  }
-
-  .greeting-content h3 {
-    font-size: 1.1rem;
-  }
-
   .video-section {
-    padding: 20px;
+    padding: 30px 0 20px 0;
   }
-
   .video-title {
     font-size: 1.2rem;
   }

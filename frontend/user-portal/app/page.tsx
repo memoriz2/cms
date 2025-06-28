@@ -94,6 +94,15 @@ export default function Home() {
     fetchData();
   }, []);
 
+  let bannerBackgroundImage = "none";
+  if (banner && banner.filePath && banner.filePath.trim() !== "") {
+    const normalizedPath = banner.filePath.replace(/\\/g, "/");
+    bannerBackgroundImage = `url(${encodeURI(
+      API_URL +
+        (normalizedPath.startsWith("/") ? normalizedPath : "/" + normalizedPath)
+    )})`;
+  }
+
   if (loading) {
     return (
       <div className="main-container">
@@ -113,25 +122,24 @@ export default function Home() {
   return (
     <main className="main-container">
       {/* 배너 섹션 */}
-      {banner && banner.filePath && banner.filePath.trim() !== "" && (
-        <section className="banner-section">
-          <Image
-            src={`${API_URL}${
-              banner.filePath.startsWith("/")
-                ? banner.filePath
-                : `/${banner.filePath}`
-            }`}
-            alt={banner.title || "배너 이미지"}
-            width={1200}
-            height={400}
-            className="banner-image"
-            priority
-            onError={(e) => {
-              console.error("배너 이미지 로드 실패:", e);
-            }}
-          />
-        </section>
-      )}
+      <section className="banner-section">
+        <div
+          className="banner-image"
+          style={{
+            width: "100%",
+            height: "240px",
+            backgroundImage: bannerBackgroundImage,
+            backgroundColor:
+              banner && banner.filePath && banner.filePath.trim() !== ""
+                ? "transparent"
+                : "#e9ecef",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+          title={banner && banner.title ? banner.title : "배너 이미지"}
+        />
+      </section>
       {/* {인사말 섹션} */}
       {greeting && (
         <section className="greeting-section">
