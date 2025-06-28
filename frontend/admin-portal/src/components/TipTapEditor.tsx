@@ -102,7 +102,12 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
       TableHeader,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Link,
-      Image,
+      Image.configure({
+        HTMLAttributes: {
+          class: "editor-image",
+        },
+        allowBase64: true,
+      }),
     ],
     content: value || "<p>여기에 텍스트를 입력하세요...</p>",
     editable: true,
@@ -252,11 +257,35 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
     if (!editor || !isEditorReady) return;
 
     console.log("=== 에디터 초기화 ===");
+    console.log("초기 value:", value);
 
     // 초기 콘텐츠 설정
     if (value) {
       editor.commands.setContent(value, false);
       console.log("초기 콘텐츠 설정 완료");
+
+      // 이미지가 있는지 확인하고 처리
+      setTimeout(() => {
+        const editorElement = editor.view.dom;
+        const images = editorElement.querySelectorAll("img");
+        console.log("에디터 내 이미지 개수:", images.length);
+
+        images.forEach((img, index) => {
+          console.log(`이미지 ${index + 1}:`, img.src);
+          // 이미지 로드 확인
+          if (img.complete) {
+            console.log(`이미지 ${index + 1} 로드 완료`);
+          } else {
+            console.log(`이미지 ${index + 1} 로드 중...`);
+            img.onload = () => {
+              console.log(`이미지 ${index + 1} 로드 완료 (onload)`);
+            };
+            img.onerror = () => {
+              console.error(`이미지 ${index + 1} 로드 실패:`, img.src);
+            };
+          }
+        });
+      }, 100);
     }
 
     // update 이벤트 리스너 제거 - onBlur에서 처리하므로 불필요
@@ -270,7 +299,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
     // return () => {
     //   editor.off("update", handleUpdate);
     // };
-  }, [editor, isEditorReady]); // stableOnChange 의존성도 제거
+  }, [editor, isEditorReady, value]); // value 의존성 다시 추가
 
   return (
     <div className="tiptap-editor">
