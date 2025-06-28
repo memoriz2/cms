@@ -562,6 +562,83 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
         >
           🖼️
         </button>
+
+        {/* 텍스트 정렬 버튼들 */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log("좌측 정렬 버튼 클릭");
+            editor?.chain().focus().setTextAlign("left").run();
+            console.log("좌측 정렬 적용 완료");
+          }}
+          className={`toolbar-button ${
+            editor?.isActive({ textAlign: "left" }) ? "active" : ""
+          }`}
+          title="좌측 정렬"
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="3" y="6" width="14" height="2" rx="1" fill="#222" />
+            <rect x="3" y="11" width="10" height="2" rx="1" fill="#222" />
+            <rect x="3" y="16" width="7" height="2" rx="1" fill="#222" />
+          </svg>
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log("가운데 정렬 버튼 클릭");
+            editor?.chain().focus().setTextAlign("center").run();
+            console.log("가운데 정렬 적용 완료");
+          }}
+          className={`toolbar-button ${
+            editor?.isActive({ textAlign: "center" }) ? "active" : ""
+          }`}
+          title="가운데 정렬"
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="5" y="6" width="14" height="2" rx="1" fill="#222" />
+            <rect x="7" y="11" width="10" height="2" rx="1" fill="#222" />
+            <rect x="9" y="16" width="6" height="2" rx="1" fill="#222" />
+          </svg>
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log("우측 정렬 버튼 클릭");
+            editor?.chain().focus().setTextAlign("right").run();
+            console.log("우측 정렬 적용 완료");
+          }}
+          className={`toolbar-button ${
+            editor?.isActive({ textAlign: "right" }) ? "active" : ""
+          }`}
+          title="우측 정렬"
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect x="7" y="6" width="14" height="2" rx="1" fill="#222" />
+            <rect x="11" y="11" width="10" height="2" rx="1" fill="#222" />
+            <rect x="14" y="16" width="7" height="2" rx="1" fill="#222" />
+          </svg>
+        </button>
       </div>
       <div
         ref={editorRef}
