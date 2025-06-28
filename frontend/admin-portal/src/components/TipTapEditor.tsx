@@ -75,6 +75,14 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const [isEditorReady, setIsEditorReady] = useState(false);
 
+  // onChange 함수를 안정화
+  const stableOnChange = useCallback(
+    (html: string) => {
+      onChange(html);
+    },
+    [onChange]
+  );
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -99,16 +107,14 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
     content: value || "<p>여기에 텍스트를 입력하세요...</p>",
     editable: true,
     autofocus: true,
-    onUpdate: ({ editor }) => {
-      const html = editor.getHTML();
-      onChange(html);
-    },
     onFocus: ({ editor }) => {
       console.log("에디터 포커스됨");
       setIsEditorReady(true);
     },
     onBlur: ({ editor }) => {
       console.log("에디터 블러됨");
+      const html = editor.getHTML();
+      stableOnChange(html);
     },
     onCreate: ({ editor }) => {
       console.log("에디터 생성됨");
@@ -146,85 +152,6 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
       // }, 200);
     }
   }, [isEditorReady]);
-
-  useEffect(() => {
-    if (!editor) return;
-    const currentEditorHtml = editor.getHTML();
-    if (currentEditorHtml !== value) {
-      console.log("=== 이미지 디버깅 ===");
-      console.log("원본 HTML:", value);
-
-      // 이미지 태그 개수 확인
-      const imgMatches = value.match(/<img[^>]*>/g);
-      console.log("이미지 태그 개수:", imgMatches ? imgMatches.length : 0);
-
-      if (imgMatches) {
-        imgMatches.forEach((imgTag, index) => {
-          console.log(`이미지 ${index + 1}:`, imgTag);
-        });
-      }
-
-      // 커서 위치 저장
-      const { from, to } = editor.state.selection;
-
-      // 원본 HTML을 그대로 설정
-      editor.commands.setContent(
-        value || "<p>여기에 텍스트를 입력하세요...</p>",
-        false
-      );
-
-      // 커서 위치 복원 (끝으로 강제 이동하지 않음)
-      setTimeout(() => {
-        try {
-          // 원래 위치가 유효하면 복원, 아니면 끝으로
-          if (
-            from <= editor.state.doc.content.size &&
-            to <= editor.state.doc.content.size
-          ) {
-            editor.commands.setTextSelection({ from, to });
-          } else {
-            editor.commands.setTextSelection(editor.state.doc.content.size);
-          }
-          console.log("커서 위치 복원 완료");
-        } catch (error) {
-          console.error("커서 위치 복원 실패:", error);
-          // 실패 시 끝으로 이동
-          editor.commands.setTextSelection(editor.state.doc.content.size);
-        }
-      }, 10);
-
-      // 에디터가 렌더링된 후 이미지가 없으면 직접 DOM에 추가
-      setTimeout(() => {
-        const editorElement = document.querySelector(".tiptap");
-        if (editorElement) {
-          const images = editorElement.querySelectorAll("img");
-          console.log("에디터 내 이미지 개수:", images.length);
-
-          // 이미지가 없고 원본에 이미지가 있으면 직접 DOM에 추가
-          if (images.length === 0 && imgMatches && imgMatches.length > 0) {
-            console.log("이미지를 직접 DOM에 추가합니다");
-
-            // 원본 HTML을 직접 DOM에 설정
-            editorElement.innerHTML = value;
-
-            // 이미지 스타일 적용
-            const newImages = editorElement.querySelectorAll("img");
-            newImages.forEach((img) => {
-              img.style.maxWidth = "100%";
-              img.style.height = "auto";
-              img.style.display = "block";
-              img.style.margin = "0";
-            });
-
-            console.log("이미지가 직접 DOM에 추가됨, 개수:", newImages.length);
-          }
-        }
-
-        // 에디터 다시 포커스
-        // forceCursor();
-      }, 300);
-    }
-  }, [value, editor]);
 
   // data- 속성 처리
   useApplyMarkDataColor([value], document);
@@ -306,7 +233,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
     };
   }, [showColorPicker, showHighlightPicker]);
 
-  // 에디터 초기화
+  // 에디터 초기화 - 한 번만 실행되도록 수정
   useEffect(() => {
     if (!editor || !isEditorReady) return;
 
@@ -318,25 +245,18 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
       console.log("초기 콘텐츠 설정 완료");
     }
 
-    // 에디터 포커스 및 커서 강제 생성
-    setTimeout(() => {
-      // forceCursor();
-    }, 100);
+    // update 이벤트 리스너 제거 - onBlur에서 처리하므로 불필요
+    // const handleUpdate = ({ editor }: { editor: Editor }) => {
+    //   const html = editor.getHTML();
+    //   stableOnChange(html);
+    // };
 
-    // 에디터 업데이트 이벤트 리스너
-    const handleUpdate = ({ editor }: { editor: Editor }) => {
-      const html = editor.getHTML();
-      if (html !== value) {
-        onChange(html);
-      }
-    };
+    // editor.on("update", handleUpdate);
 
-    editor.on("update", handleUpdate);
-
-    return () => {
-      editor.off("update", handleUpdate);
-    };
-  }, [editor, isEditorReady, value, onChange]);
+    // return () => {
+    //   editor.off("update", handleUpdate);
+    // };
+  }, [editor, isEditorReady]); // stableOnChange 의존성도 제거
 
   return (
     <div className="tiptap-editor">
