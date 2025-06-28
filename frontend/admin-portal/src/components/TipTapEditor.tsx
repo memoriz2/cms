@@ -109,38 +109,36 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
         });
       }
 
+      // 원본 HTML을 그대로 설정
       editor.commands.setContent(value || "<p></p>", false);
 
-      // 에디터가 렌더링된 후 이미지가 없으면 직접 추가
+      // 에디터가 렌더링된 후 이미지가 없으면 직접 DOM에 추가
       setTimeout(() => {
         const editorElement = document.querySelector(".tiptap");
         if (editorElement) {
           const images = editorElement.querySelectorAll("img");
           console.log("에디터 내 이미지 개수:", images.length);
 
-          // 이미지가 없고 원본에 이미지가 있으면 직접 추가
+          // 이미지가 없고 원본에 이미지가 있으면 직접 DOM에 추가
           if (images.length === 0 && imgMatches && imgMatches.length > 0) {
-            console.log("이미지를 직접 추가합니다");
-            imgMatches.forEach((imgTag) => {
-              // 임시 div를 만들어서 이미지 태그를 파싱
-              const tempDiv = document.createElement("div");
-              tempDiv.innerHTML = imgTag;
-              const img = tempDiv.querySelector("img");
-              if (img) {
-                // 이미지 스타일 적용
-                img.style.maxWidth = "100%";
-                img.style.height = "auto";
-                img.style.display = "block";
-                img.style.margin = "1rem 0";
+            console.log("이미지를 직접 DOM에 추가합니다");
 
-                // 에디터에 추가
-                editorElement.appendChild(img);
-                console.log("이미지 추가됨:", img.outerHTML);
-              }
+            // 원본 HTML을 직접 DOM에 설정
+            editorElement.innerHTML = value;
+
+            // 이미지 스타일 적용
+            const newImages = editorElement.querySelectorAll("img");
+            newImages.forEach((img) => {
+              img.style.maxWidth = "100%";
+              img.style.height = "auto";
+              img.style.display = "block";
+              img.style.margin = "0";
             });
+
+            console.log("이미지가 직접 DOM에 추가됨, 개수:", newImages.length);
           }
         }
-      }, 100);
+      }, 300); // 시간을 더 늘려서 에디터가 완전히 렌더링된 후 실행
     }
   }, [value, editor]);
 
