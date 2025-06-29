@@ -971,3 +971,7 @@
   border: none;
   border-radius: 3px;
 }
+
+.tiptap .ProseMirror span[style*="background-color"] {
+  background-color: inherit;
+}

@@ -517,6 +517,19 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
+            console.log("표 삭제 버튼 클릭");
+            editor?.chain().focus().deleteTable().run();
+            console.log("표 삭제 완료");
+          }}
+          className="toolbar-button"
+          title="표 삭제"
+        >
+          표 삭제
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
             console.log("이미지 업로드 버튼 클릭됨");
 
             // 파일 input을 직접 클릭하는 대신 새로운 input을 생성
@@ -638,6 +651,25 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
             <rect x="11" y="11" width="10" height="2" rx="1" fill="#222" />
             <rect x="14" y="16" width="7" height="2" rx="1" fill="#222" />
           </svg>
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            console.log("lorem 버튼 클릭");
+            editor
+              ?.chain()
+              .focus()
+              .insertContent(
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+              )
+              .run();
+            console.log("lorem 텍스트 삽입 완료");
+          }}
+          className="toolbar-button"
+          title="Lorem Ipsum 삽입"
+        >
+          lorem
         </button>
       </div>
       <div

@@ -133,7 +133,15 @@ export default function Home() {
                 : "#e9ecef",
           }}
           title={banner && banner.title ? banner.title : "배너 이미지"}
-        />
+        >
+          <div className="banner-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum
+            dolor sit amet consectetur adipisicing elit. Blanditiis beatae
+            dolore quas, adipisci, eos, amet excepturi laudantium soluta alias
+            ipsum minus nesciunt placeat? Dicta voluptatem assumenda veniam hic
+            officiis id.
+          </div>
+        </div>
       </section>
       {/* {인사말 섹션} */}
       {greeting && (

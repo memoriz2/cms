@@ -28,6 +28,23 @@
   background-repeat: no-repeat;
   border-radius: 0;
   display: block;
+  position: relative;
+}
+
+.banner-text {
+  position: absolute;
+  left: 0;
+  bottom: 20%;
+  transform: none;
+  color: white;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  text-align: left;
+  width: 100%;
+  padding: 0 40px;
+  z-index: 2;
+  pointer-events: none;
 }
 
 /* 인사말 섹션 */
