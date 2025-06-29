@@ -978,3 +978,26 @@
 .tiptap .ProseMirror span[style*="background-color"] {
   background-color: inherit;
 }
+
+/* 글자 크기가 적용된 텍스트에서도 텍스트 커서 유지 */
+.ProseMirror [style*="font-size"] {
+  cursor: text;
+}
+
+/* 폰트 사이즈 스타일 강제 적용 */
+.ProseMirror span[style*="font-size"] {
+  font-size: inherit !important;
+}
+
+.ProseMirror p[style*="font-size"] {
+  font-size: inherit !important;
+}
+
+.ProseMirror div[style*="font-size"] {
+  font-size: inherit !important;
+}
+
+/* textStyle 마크에 적용된 폰트 사이즈 강제 적용 */
+.ProseMirror mark[style*="font-size"] {
+  font-size: inherit !important;
+}

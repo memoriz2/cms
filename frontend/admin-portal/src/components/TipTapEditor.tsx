@@ -15,7 +15,7 @@ import { HexColorPicker } from "react-colorful";
 import { useApplyMarkDataColor } from "../hooks/useApplyMarkDataColor";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
-import { Editor } from "@tiptap/core";
+import { Editor, Extension } from "@tiptap/core";
 import "./TipTapEditor.css";
 
 // 커스텀 FontFamily 확장
@@ -39,24 +39,30 @@ const FontFamily = TextStyle.extend({
   },
 });
 
-// 커스텀 FontSize 확장
-const FontSize = TextStyle.extend({
-  addAttributes() {
-    return {
-      ...this.parent?.(),
-      fontSize: {
-        default: null,
-        parseHTML: (element) => element.style.fontSize,
-        renderHTML: (attributes) => {
-          if (!attributes.fontSize) {
-            return {};
-          }
-          return {
-            style: `font-size: ${attributes.fontSize}`,
-          };
+// FontSize 커스텀 확장
+const FontSize = Extension.create({
+  name: "fontSize",
+  addGlobalAttributes() {
+    return [
+      {
+        types: ["textStyle"],
+        attributes: {
+          fontSize: {
+            default: null,
+            parseHTML: (element: HTMLElement) => {
+              const fontSize = element.style.fontSize;
+              return fontSize ? fontSize.replace("px", "") : null;
+            },
+            renderHTML: (attributes: any) => {
+              if (!attributes.fontSize) return {};
+              return {
+                style: `font-size: ${attributes.fontSize}px !important`,
+              };
+            },
+          },
         },
       },
-    };
+    ];
   },
 });
 
@@ -85,21 +91,19 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({
-        strike: {},
-        code: false,
-      }),
-      TextStyle,
+      StarterKit,
+      Underline,
       Color,
       Highlight.configure({ multicolor: true }),
+      TextStyle,
       FontFamily,
       FontSize,
-      Underline,
-      ImageResize,
-      Table.configure({ resizable: true }),
+      Table.configure({
+        resizable: true,
+      }),
       TableRow,
-      TableCell,
       TableHeader,
+      TableCell,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Link,
       Image.configure({
@@ -164,7 +168,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
   const setTextColor = useCallback(
     (color: string) => {
       if (editor) {
-        editor.chain().setColor(color).run();
+        editor.chain().focus().setColor(color).run();
       }
     },
     [editor]
@@ -173,7 +177,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
   const applyHighlightColor = useCallback(
     (color: string) => {
       if (editor) {
-        editor.chain().setHighlight({ color }).run();
+        editor.chain().focus().setHighlight({ color }).run();
       }
     },
     [editor]
@@ -317,11 +321,12 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
             if (e.target.value) {
               editor
                 ?.chain()
+                .focus()
                 .setMark("textStyle", { fontFamily: e.target.value })
                 .run();
               console.log("폰트 적용 완료");
             } else {
-              editor?.chain().unsetMark("textStyle").run();
+              editor?.chain().focus().unsetMark("textStyle").run();
               console.log("폰트 제거 완료");
             }
           }}
@@ -353,13 +358,33 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
             setSelectedFontSize(e.target.value);
             console.log("글자 크기 변경:", e.target.value);
             if (e.target.value) {
-              editor
-                ?.chain()
-                .setMark("textStyle", { fontSize: e.target.value })
-                .run();
-              console.log("글자 크기 적용 완료");
+              // FontSize 확장을 사용하여 폰트 사이즈 적용
+              const selection = editor?.state.selection;
+              if (selection && !selection.empty) {
+                const fontSize = e.target.value.replace("px", "");
+                editor
+                  ?.chain()
+                  .focus()
+                  .setMark("textStyle", {
+                    fontSize: fontSize,
+                  })
+                  .run();
+
+                console.log("글자 크기 적용 시도:", e.target.value);
+              } else {
+                // 텍스트가 선택되지 않은 경우 현재 커서 위치에 적용
+                console.log("텍스트가 선택되지 않음, 현재 위치에 적용");
+                const fontSize = e.target.value.replace("px", "");
+                editor
+                  ?.chain()
+                  .focus()
+                  .setMark("textStyle", {
+                    fontSize: fontSize,
+                  })
+                  .run();
+              }
             } else {
-              editor?.chain().unsetMark("textStyle").run();
+              editor?.chain().focus().unsetMark("textStyle").run();
               console.log("글자 크기 제거 완료");
             }
           }}
@@ -454,7 +479,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
             e.stopPropagation();
             e.preventDefault();
             console.log("굵게 버튼 클릭");
-            editor?.chain().toggleBold().run();
+            editor?.chain().focus().toggleBold().run();
             console.log("굵게 적용 완료");
           }}
           className="toolbar-button"
@@ -467,7 +492,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
             e.stopPropagation();
             e.preventDefault();
             console.log("기울임 버튼 클릭");
-            editor?.chain().toggleItalic().run();
+            editor?.chain().focus().toggleItalic().run();
             console.log("기울임 적용 완료");
           }}
           className="toolbar-button"
@@ -480,7 +505,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
             e.stopPropagation();
             e.preventDefault();
             console.log("밑줄 버튼 클릭");
-            editor?.chain().toggleUnderline().run();
+            editor?.chain().focus().toggleUnderline().run();
             console.log("밑줄 적용 완료");
           }}
           className="toolbar-button"
@@ -493,7 +518,7 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
             e.stopPropagation();
             e.preventDefault();
             console.log("취소선 버튼 클릭");
-            editor?.chain().toggleStrike().run();
+            editor?.chain().focus().toggleStrike().run();
             console.log("취소선 적용 완료");
           }}
           className="toolbar-button"
