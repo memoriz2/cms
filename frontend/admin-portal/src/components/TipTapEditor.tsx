@@ -200,11 +200,16 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
             const reader = new FileReader();
             reader.onload = (e) => {
               console.log("이미지 로드 완료:", e.target?.result);
-              editor
-                ?.chain()
-                .focus()
-                .setImage({ src: e.target?.result as string })
-                .run();
+              const imageHtml = `<img class="editor-image" src="${e.target?.result}" draggable="true">`;
+              editor?.chain().focus().insertContent(imageHtml).run();
+
+              // 이미지 삽입 후 HTML 구조 출력
+              setTimeout(() => {
+                const html = editor?.getHTML();
+                console.log("=== 이미지 삽입 후 HTML 구조 ===");
+                console.log(html);
+                console.log("=== HTML 구조 끝 ===");
+              }, 100);
             };
             reader.readAsDataURL(blob);
             event.preventDefault();
@@ -549,11 +554,17 @@ const TipTapEditor: React.FC<TipTapEditorProps> = ({ value, onChange }) => {
                 reader.onload = (ev) => {
                   console.log("파일 로드 완료:", ev.target?.result);
                   console.log("에디터 상태:", editor);
-                  editor
-                    ?.chain()
-                    .focus()
-                    .setImage({ src: ev.target?.result as string })
-                    .run();
+                  const imageHtml = `<img class="editor-image" src="${ev.target?.result}" draggable="true">`;
+                  editor?.chain().focus().insertContent(imageHtml).run();
+
+                  // 이미지 삽입 후 HTML 구조 출력
+                  setTimeout(() => {
+                    const html = editor?.getHTML();
+                    console.log("=== 이미지 삽입 후 HTML 구조 ===");
+                    console.log(html);
+                    console.log("=== HTML 구조 끝 ===");
+                  }, 100);
+
                   console.log("이미지 삽입 명령 실행됨");
                 };
                 reader.readAsDataURL(file);

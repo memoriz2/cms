@@ -45,6 +45,19 @@ const GreetingManagement: React.FC = () => {
         console.log("목록의 첫 번째 항목 내용:", data.content?.[0]?.content);
         setGreetings(data.content || []);
         console.log("설정된 인사말 목록:", data.content || []);
+
+        // 각 인사말의 HTML 구조 콘솔 출력
+        if (data.content && data.content.length > 0) {
+          console.log("=== 관리자 포털 인사말 목록 HTML 구조 ===");
+          data.content.forEach((greeting: Greeting, index: number) => {
+            console.log(`--- 인사말 ${index + 1} ---`);
+            console.log("제목:", greeting.title);
+            console.log("HTML 내용:", greeting.content);
+            console.log("활성화 상태:", greeting.isActive);
+            console.log("---");
+          });
+          console.log("=== 관리자 포털 인사말 목록 HTML 구조 끝 ===");
+        }
       } else {
         console.error("목록 불러오기 실패:", response.status);
       }
@@ -260,11 +273,12 @@ const GreetingManagement: React.FC = () => {
 
                           el.querySelectorAll("img[data-image]").forEach(
                             (img) => {
-                              (img as HTMLElement).style.maxWidth = "100%";
-                              (img as HTMLElement).style.height = "auto";
-                              (img as HTMLElement).style.display = "block";
-                              (img as HTMLElement).style.margin = "1rem 0";
-
+                              // 저장된 스타일이 없을 때만 기본 스타일 적용
+                              const imgElement = img as HTMLElement;
+                              if (!imgElement.style.display) {
+                                imgElement.style.maxWidth = "100%";
+                                imgElement.style.height = "auto";
+                              }
                               img.removeAttribute("data-image");
                             }
                           );
@@ -272,10 +286,12 @@ const GreetingManagement: React.FC = () => {
                           // 일반적인 img 태그도 처리
                           el.querySelectorAll("img").forEach((img) => {
                             if (!img.hasAttribute("data-image")) {
-                              (img as HTMLElement).style.maxWidth = "100%";
-                              (img as HTMLElement).style.height = "auto";
-                              (img as HTMLElement).style.display = "block";
-                              (img as HTMLElement).style.margin = "1rem 0";
+                              // 저장된 스타일이 없을 때만 기본 스타일 적용
+                              const imgElement = img as HTMLElement;
+                              if (!imgElement.style.display) {
+                                imgElement.style.maxWidth = "100%";
+                                imgElement.style.height = "auto";
+                              }
                             }
                           });
                         }, 0);

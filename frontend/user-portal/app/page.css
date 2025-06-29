@@ -113,6 +113,20 @@
   height: auto;
   margin: 1rem 0;
   border-radius: 8px;
+  display: inline-block;
+}
+
+/* 이미지 정렬을 위한 추가 스타일 - 저장된 스타일만 적용 */
+.greeting-content img[style*="float: right"] {
+  float: right !important;
+  margin-left: 1rem !important;
+  margin-right: 0 !important;
+}
+
+.greeting-content img[style*="margin-left: auto"] {
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: 0 !important;
 }
 
 .greeting-content table {

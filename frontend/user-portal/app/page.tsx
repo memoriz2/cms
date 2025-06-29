@@ -78,6 +78,12 @@ export default function Home() {
           );
           if (greetingResponse.data) {
             setGreeting(greetingResponse.data);
+
+            // 인사말 HTML 구조 콘솔 출력
+            console.log("=== 사용자 포털 인사말 HTML 구조 ===");
+            console.log("인사말 제목:", greetingResponse.data.title);
+            console.log("인사말 내용 HTML:", greetingResponse.data.content);
+            console.log("=== 인사말 HTML 구조 끝 ===");
           }
         } catch (greetingError) {
           console.log("인사말 데이터를 불러올 수 없습니다:", greetingError);
