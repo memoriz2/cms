@@ -111,22 +111,32 @@
 .greeting-content img {
   max-width: 100%;
   height: auto;
-  margin: 1rem 0;
+  margin: 1rem auto;
   border-radius: 8px;
-  display: inline-block;
+  display: block;
 }
 
-/* 이미지 정렬을 위한 추가 스타일 - 저장된 스타일만 적용 */
-.greeting-content img[style*="float: right"] {
-  float: right !important;
-  margin-left: 1rem !important;
-  margin-right: 0 !important;
-}
-
-.greeting-content img[style*="margin-left: auto"] {
+/* 이미지 정렬을 위한 스타일 */
+.greeting-content img[style*="text-align: left"],
+.greeting-content img[style*="float: left"] {
+  float: left !important;
+  margin: 1rem 1rem 1rem 0 !important;
   display: block !important;
-  margin-left: auto !important;
-  margin-right: 0 !important;
+}
+
+.greeting-content img[style*="text-align: center"],
+.greeting-content img[style*="margin: 0 auto"] {
+  display: block !important;
+  margin: 1rem auto !important;
+  float: none !important;
+}
+
+.greeting-content img[style*="text-align: right"],
+.greeting-content img[style*="float: right"],
+.greeting-content img[style*="margin-left: auto"] {
+  float: right !important;
+  margin: 1rem 0 1rem 1rem !important;
+  display: block !important;
 }
 
 .greeting-content table {
