@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/banners/**").permitAll()  // 사용자용 배너 API 허용
                 .requestMatchers("/api/greetings/**").permitAll()  // 사용자용 인사말 API 허용
                 .requestMatchers("/uploads/**").permitAll()  // 정적 파일 접근 허용
+                .requestMatchers("/api/banner-news/**").permitAll() // 사용자용 배너 뉴스 API 허용
                 .anyRequest().authenticated();
         
         return http.build();
