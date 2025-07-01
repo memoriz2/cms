@@ -43,4 +43,9 @@ public class BannerNewsController {
         return response;
     }
     
+    @GetMapping("/active-count")
+    public long getActiveBannerNewsCount() {
+        return bannerNewsService.getActiveBannerNewsCount();
+    }
+    
 }

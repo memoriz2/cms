@@ -83,8 +83,18 @@ public class BannerNewsService {
         bannerNewsRepository.deleteById(id);
     }
 
+    // 활성화된 배너 뉴스 개수 조회
+    public long getActiveBannerNewsCount() {
+        return bannerNewsRepository.countByIsActiveTrue();
+    }
+
     // 활성화/비활성화 토글
     public BannerNewsResponse toggleActive(Long id, Boolean isActive){
+        // 활성화하려는 경우, 이미 4개가 활성화되어 있으면 예외 발생
+        if (isActive && getActiveBannerNewsCount() >= 4) {
+            throw new RuntimeException("이미 4개의 배너 뉴스가 활성화되어 있습니다. 더 이상 활성화할 수 없습니다.");
+        }
+        
         BannerNews news = bannerNewsRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("존재하지 않는 배너 뉴스입니다."));
         news.setIsActive(isActive);

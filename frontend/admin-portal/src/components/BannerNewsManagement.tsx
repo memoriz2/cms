@@ -33,6 +33,18 @@ const BannerNewsManagement = () => {
   const [warningMessage, setWarningMessage] = useState("");
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [activeCount, setActiveCount] = useState(0);
+
+  const fetchActiveCount = async () => {
+    try {
+      const response = await axios.get(
+        `${API_ENDPOINTS.BANNER_NEWS}/active-count`
+      );
+      setActiveCount(response.data);
+    } catch (error) {
+      console.error("활성화된 배너 뉴스 개수 조회 실패:", error);
+    }
+  };
 
   const fetchBannerNews = async () => {
     const res = await axios.get(API_ENDPOINTS.BANNER_NEWS, {
@@ -56,6 +68,9 @@ const BannerNewsManagement = () => {
     }
     setBannerNews(res.data.content);
     setTotalPages(res.data.totalPages);
+
+    // 활성화된 개수도 함께 업데이트
+    await fetchActiveCount();
   };
 
   const handleCreate = async (formData: any) => {
@@ -113,8 +128,16 @@ const BannerNewsManagement = () => {
       if (axios.isAxiosError(error)) {
         console.error("응답 데이터:", error.response?.data);
         console.error("상태 코드:", error.response?.status);
+
+        // 서버에서 받은 에러 메시지가 있으면 사용
+        if (error.response?.data?.message) {
+          setErrorMessage(error.response.data.message);
+        } else {
+          setErrorMessage("활성화 상태 변경에 실패했습니다.");
+        }
+      } else {
+        setErrorMessage("활성화 상태 변경에 실패했습니다.");
       }
-      setErrorMessage("활성화 상태 변경에 실패했습니다.");
       setErrorModalOpen(true);
     }
   };
@@ -123,8 +146,12 @@ const BannerNewsManagement = () => {
     fetchBannerNews();
   }, [page, size]);
 
-  const openModal = (data: BannerNewsData | null = null) => {
+  const openModal = async (data: BannerNewsData | null = null) => {
     console.log("openModal 호출 - 데이터:", data);
+
+    // 활성화된 개수 업데이트
+    await fetchActiveCount();
+
     if (data) {
       console.log("수정 모드 - 원본 데이터 isActive:", data.isActive);
       setEditData(data);
@@ -459,6 +486,16 @@ const BannerNewsManagement = () => {
                           "이전 상태:",
                           formData.isActive
                         );
+
+                        // 활성화하려는 경우, 이미 4개가 활성화되어 있으면 경고
+                        if (checked && !formData.isActive && activeCount >= 4) {
+                          setWarningMessage(
+                            "이미 4개의 배너 뉴스가 활성화되어 있습니다. 더 이상 활성화할 수 없습니다."
+                          );
+                          setWarningModalOpen(true);
+                          return;
+                        }
+
                         setFormData((prev) => {
                           const newData = { ...prev, isActive: checked };
                           console.log("새로운 formData:", newData);
@@ -473,7 +510,8 @@ const BannerNewsManagement = () => {
                     </span>
                   </div>
                   <p id="active-description" className="help-text">
-                    활성화된 배너 뉴스는 사용자 페이지에 표시됩니다.(최대 4개)
+                    활성화된 배너 뉴스는 사용자 페이지에 표시됩니다.(최대 4개) -
+                    현재 {activeCount}개 활성화됨
                   </p>
                 </fieldset>
               </div>

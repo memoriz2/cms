@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.greensupia.backend.util.FileUtil;
-
 @Component
 @RestController
 public class BaseController {
@@ -43,6 +42,8 @@ public class BaseController {
         errorResponse.put("message", "서버 내부 오류가 발생했습니다.");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
+
+
 
     // 게시판/에디터용 이미지 업로드
     @PostMapping("/api/uploads/board")

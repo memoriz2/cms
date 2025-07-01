@@ -9,4 +9,7 @@ public interface BannerNewsRepository extends JpaRepository<BannerNews, Long> {
 
     // 활성화된 배너 뉴스만 최신순으로 최대 N개 조회
     List<BannerNews> findByIsActiveTrueOrderByCreatedAtDesc(Pageable pageable);
+    
+    // 활성화된 배너 뉴스 개수 조회
+    long countByIsActiveTrue();
 }
