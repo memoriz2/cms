@@ -62,6 +62,46 @@
   background-color: #f9fafb;
 }
 
+/* 제목 셀 스타일 */
+.title-cell {
+  max-width: 250px;
+}
+
+.title-cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 출처 셀 스타일 */
+.source-cell {
+  max-width: 150px;
+}
+
+.source-cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 링크 셀 스타일 */
+.link-cell {
+  max-width: 200px;
+}
+
+.link-cell a {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.link-cell a:hover {
+  text-decoration: underline;
+}
+
 .banner-news-table button {
   padding: 6px 12px;
   margin: 0 4px;
@@ -274,6 +314,18 @@ form#banner-news-form fieldset {
     padding: 10px;
   }
 
+  .title-cell {
+    max-width: 150px;
+  }
+
+  .source-cell {
+    max-width: 100px;
+  }
+
+  .link-cell {
+    max-width: 120px;
+  }
+
   .banner-news-management header {
     flex-direction: column;
     gap: 12px;
@@ -426,6 +478,18 @@ form#banner-news-form fieldset {
     padding: 8px;
   }
 
+  .title-cell {
+    max-width: 100px;
+  }
+
+  .source-cell {
+    max-width: 60px;
+  }
+
+  .link-cell {
+    max-width: 60px;
+  }
+
   .banner-news-management h1 {
     font-size: 18px;
   }
@@ -442,12 +506,15 @@ form#banner-news-form fieldset {
   /* 더 작은 화면에서 테이블 컬럼 조정 */
   .banner-news-table th:nth-child(4),
   .banner-news-table td:nth-child(4) {
-    display: none; /* 출처 컬럼 숨김 */
+    min-width: 60px;
+    max-width: 60px;
   }
 
+  /* 링크 컬럼은 표시하되 말줄임표로 처리 */
   .banner-news-table th:nth-child(5),
   .banner-news-table td:nth-child(5) {
-    display: none; /* 링크 컬럼 숨김 */
+    min-width: 60px;
+    max-width: 60px;
   }
 
   .banner-news-table th:nth-child(7),
@@ -457,7 +524,7 @@ form#banner-news-form fieldset {
 
   /* 빈 데이터 행의 colspan 조정 */
   .banner-news-table tr td[colspan="8"] {
-    colspan: 5;
+    colspan: 7;
   }
 
   /* 테이블 최소 너비 조정 */

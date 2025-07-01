@@ -56,6 +56,14 @@
   cursor: pointer;
   padding: 0.5rem;
   margin-right: 1rem;
+  color: #333;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  display: none;
+}
+
+.menu-toggle-btn:hover {
+  background-color: #f0f0f0;
 }
 
 .content-header h1 {
@@ -76,6 +84,10 @@
     position: sticky;
     top: 0;
     z-index: 100;
+  }
+
+  .menu-toggle-btn {
+    display: block;
   }
 
   .main-content {

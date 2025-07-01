@@ -45,6 +45,15 @@ const BannerNewsManagement = () => {
     );
     console.log("첫 번째 항목의 isActive 값:", res.data.content[0]?.isActive);
     console.log("첫 번째 항목의 active 값:", res.data.content[0]?.active);
+
+    // 수정된 항목의 isActive 값 확인
+    if (editData) {
+      const updatedItem = res.data.content.find(
+        (item: any) => item.id === editData.id
+      );
+      console.log("수정된 항목 찾기:", updatedItem);
+      console.log("수정된 항목의 isActive 값:", updatedItem?.isActive);
+    }
     setBannerNews(res.data.content);
     setTotalPages(res.data.totalPages);
   };
@@ -55,8 +64,21 @@ const BannerNewsManagement = () => {
   };
 
   const handleUpdate = async (id: number, formData: any) => {
-    await axios.put(`${API_ENDPOINTS.BANNER_NEWS}/${id}`, formData);
-    fetchBannerNews();
+    console.log("handleUpdate 호출 - ID:", id, "데이터:", formData);
+    try {
+      const response = await axios.put(
+        `${API_ENDPOINTS.BANNER_NEWS}/${id}`,
+        formData
+      );
+      console.log("수정 API 응답:", response.data);
+      console.log("수정 API 응답의 isActive 값:", response.data.isActive);
+      fetchBannerNews();
+    } catch (error) {
+      console.error("수정 API 에러:", error);
+      if (axios.isAxiosError(error)) {
+        console.error("에러 응답:", error.response?.data);
+      }
+    }
   };
 
   const handleDelete = async (id: number) => {
@@ -102,7 +124,9 @@ const BannerNewsManagement = () => {
   }, [page, size]);
 
   const openModal = (data: BannerNewsData | null = null) => {
+    console.log("openModal 호출 - 데이터:", data);
     if (data) {
+      console.log("수정 모드 - 원본 데이터 isActive:", data.isActive);
       setEditData(data);
       setFormData({
         title: data.title,
@@ -112,6 +136,7 @@ const BannerNewsManagement = () => {
         isActive: data.isActive,
       });
     } else {
+      console.log("등록 모드");
       setFormData({
         title: "",
         source: "",
@@ -131,9 +156,14 @@ const BannerNewsManagement = () => {
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("폼 제출 - 현재 formData:", formData);
+    console.log("폼 제출 - editData:", editData);
+
     if (editData) {
+      console.log("수정 모드 - 전송할 데이터:", formData);
       await handleUpdate(editData.id, formData);
     } else {
+      console.log("등록 모드 - 전송할 데이터:", formData);
       await handleCreate(formData);
     }
     closeModal();
@@ -261,13 +291,18 @@ const BannerNewsManagement = () => {
                         </span>
                       )}
                     </td>
-                    <td>{item.title}</td>
-                    <td>{item.source}</td>
-                    <td>
+                    <td className="title-cell" title={item.title}>
+                      {item.title}
+                    </td>
+                    <td className="source-cell" title={item.source}>
+                      {item.source}
+                    </td>
+                    <td className="link-cell">
                       <a
                         href={item.linkUrl}
                         target="_blank"
                         rel="noopener noreferrer"
+                        title={item.linkUrl}
                       >
                         {item.linkUrl}
                       </a>
@@ -417,12 +452,25 @@ const BannerNewsManagement = () => {
                     <ToggleSwitch
                       id="isActive"
                       checked={formData.isActive}
-                      onChange={(checked) =>
-                        setFormData((prev) => ({ ...prev, isActive: checked }))
-                      }
+                      onChange={(checked) => {
+                        console.log(
+                          "모달 내부 ToggleSwitch 변경:",
+                          checked,
+                          "이전 상태:",
+                          formData.isActive
+                        );
+                        setFormData((prev) => {
+                          const newData = { ...prev, isActive: checked };
+                          console.log("새로운 formData:", newData);
+                          return newData;
+                        });
+                      }}
+                      aria-label="활성화 상태 토글"
                       aria-describedby="active-description"
                     />
-                    <span className="toggle-label">활성화</span>
+                    <span className="toggle-label">
+                      활성화 (현재: {formData.isActive ? "활성" : "비활성"})
+                    </span>
                   </div>
                   <p id="active-description" className="help-text">
                     활성화된 배너 뉴스는 사용자 페이지에 표시됩니다.(최대 4개)

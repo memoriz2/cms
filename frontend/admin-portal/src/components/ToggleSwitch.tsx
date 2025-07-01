@@ -7,6 +7,7 @@ interface ToggleSwitchProps {
   disabled?: boolean;
   id?: string;
   "aria-label"?: string;
+  "aria-describedby"?: string;
 }
 
 const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
@@ -15,8 +16,17 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   disabled = false,
   id,
   "aria-label": ariaLabel,
+  "aria-describedby": ariaDescribedBy,
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(
+      "ToggleSwitch handleChange:",
+      e.target.checked,
+      "disabled:",
+      disabled,
+      "id:",
+      id
+    );
     if (!disabled) {
       onChange(e.target.checked);
     }
@@ -31,6 +41,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
         onChange={handleChange}
         disabled={disabled}
         aria-label={ariaLabel}
+        aria-describedby={ariaDescribedBy}
       />
       <span className="slider"></span>
     </label>

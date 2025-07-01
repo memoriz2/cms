@@ -8,9 +8,18 @@ import "./App.css";
 
 function App() {
   const [activeMenu, setActiveMenu] = useState("videos");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleMenuChange = (menu: string) => {
     setActiveMenu(menu);
+    // 모바일에서 메뉴 선택 시 사이드바 닫기
+    if (window.innerWidth <= 768) {
+      setSidebarOpen(false);
+    }
+  };
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
   };
 
   const renderContent = () => {
@@ -45,9 +54,21 @@ function App() {
 
   return (
     <div className="app">
-      <Sidebar activeMenu={activeMenu} onMenuChange={handleMenuChange} />
-      <main className="main-content">
+      <Sidebar
+        activeMenu={activeMenu}
+        onMenuChange={handleMenuChange}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+      <main className={`main-content ${sidebarOpen ? "sidebar-open" : ""}`}>
         <header className="content-header">
+          <button
+            className="menu-toggle-btn"
+            onClick={toggleSidebar}
+            aria-label="메뉴 토글"
+          >
+            ☰
+          </button>
           <h1>{getPageTitle()}</h1>
         </header>
         <section className="content-body">{renderContent()}</section>

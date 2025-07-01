@@ -42,22 +42,36 @@ public class BannerNewsService {
         bannerNews.setSource(request.getSource());
         bannerNews.setImagePath(request.getImagePath());
         bannerNews.setLinkUrl(request.getLinkUrl());
-        bannerNews.setIsActive(request.isActive());
+        bannerNews.setIsActive(request.getIsActive());
         bannerNewsRepository.save(bannerNews);
         return toResponse(bannerNews);
     }
 
     // 수정
     public BannerNewsResponse update(Long id, BannerNewsRequest request){
+        System.out.println("=== BannerNews update called: id=" + id + ", request.isActive=" + request.getIsActive() + " ===");
+        
         BannerNews news = bannerNewsRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("존재하지 않는 배너 뉴스입니다."));
+        
+        System.out.println("=== Before update - news.isActive=" + news.getIsActive() + " ===");
+        
         news.setTitle(request.getTitle());
         news.setSource(request.getSource());
         news.setImagePath(request.getImagePath());
         news.setLinkUrl(request.getLinkUrl());
-        news.setIsActive(request.isActive());
-        bannerNewsRepository.save(news);
-        return toResponse(news);
+        news.setIsActive(request.getIsActive());
+        
+        System.out.println("=== After set - news.isActive=" + news.getIsActive() + " ===");
+        
+        BannerNews savedNews = bannerNewsRepository.save(news);
+        
+        System.out.println("=== After save - savedNews.isActive=" + savedNews.getIsActive() + " ===");
+        
+        BannerNewsResponse response = toResponse(savedNews);
+        System.out.println("=== Response - response.isActive=" + response.getIsActive() + " ===");
+        
+        return response;
     }
 
     // 삭제
