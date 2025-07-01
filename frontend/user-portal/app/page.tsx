@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../config";
 import "./page.css";
+import BannerNewsSection from "./components/BannerNewsSection";
 
 interface Video {
   id: number;
@@ -159,6 +160,8 @@ export default function Home() {
           />
         </section>
       )}
+      {/* 배너뉴스 섹션 */}
+      <BannerNewsSection />
       {/* 비디오 섹션 */}
       <section className="video-section">
         {video ? (
