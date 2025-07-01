@@ -42,7 +42,7 @@ public class BannerNewsService {
         bannerNews.setSource(request.getSource());
         bannerNews.setImagePath(request.getImagePath());
         bannerNews.setLinkUrl(request.getLinkUrl());
-        bannerNews.setActive(request.isActive());
+        bannerNews.setIsActive(request.isActive());
         bannerNewsRepository.save(bannerNews);
         return toResponse(bannerNews);
     }
@@ -55,7 +55,7 @@ public class BannerNewsService {
         news.setSource(request.getSource());
         news.setImagePath(request.getImagePath());
         news.setLinkUrl(request.getLinkUrl());
-        news.setActive(request.isActive());
+        news.setIsActive(request.isActive());
         bannerNewsRepository.save(news);
         return toResponse(news);
     }
@@ -70,10 +70,10 @@ public class BannerNewsService {
     }
 
     // 활성화/비활성화 토글
-    public BannerNewsResponse toggleActive(Long id, boolean isActive){
+    public BannerNewsResponse toggleActive(Long id, Boolean isActive){
         BannerNews news = bannerNewsRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("존재하지 않는 배너 뉴스입니다."));
-        news.setActive(isActive);
+        news.setIsActive(isActive);
         bannerNewsRepository.save(news);
         return toResponse(news);
     }
@@ -86,7 +86,7 @@ public class BannerNewsService {
         dto.setSource(news.getSource());
         dto.setImagePath(news.getImagePath());
         dto.setLinkUrl(news.getLinkUrl());
-        dto.setActive(news.isActive());
+        dto.setIsActive(news.getIsActive());
         dto.setCreatedAt(news.getCreatedAt());
         return dto;
     }

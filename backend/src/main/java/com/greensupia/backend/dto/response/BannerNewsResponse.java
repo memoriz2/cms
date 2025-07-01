@@ -12,6 +12,6 @@ public class BannerNewsResponse {
     private String source;
     private String imagePath;
     private String linkUrl;
-    private boolean isActive;
+    private Boolean isActive;
     private LocalDateTime createdAt;
 }

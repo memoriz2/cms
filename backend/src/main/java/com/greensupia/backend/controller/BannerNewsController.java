@@ -37,7 +37,10 @@ public class BannerNewsController {
 
     @PutMapping("/{id}/active") 
     public BannerNewsResponse toggleActive(@PathVariable Long id, @RequestParam boolean isActive){
-        return bannerNewsService.toggleActive(id, isActive);
+        System.out.println("=== BannerNews toggleActive called: id=" + id + ", isActive=" + isActive + " ===");
+        BannerNewsResponse response = bannerNewsService.toggleActive(id, isActive);
+        System.out.println("=== BannerNews toggleActive response: " + response + " ===");
+        return response;
     }
     
 }

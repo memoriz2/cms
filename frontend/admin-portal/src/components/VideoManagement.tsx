@@ -3,6 +3,7 @@ import { API_ENDPOINTS } from "../config";
 import axios from "axios";
 import "./VideoManagement.css";
 import Pagination from "./Pagination";
+import ToggleSwitch from "./ToggleSwitch";
 
 interface Video {
   id: number;
@@ -285,17 +286,11 @@ export default function VideoManagement() {
                 >
                   <td>{video.title}</td>
                   <td>
-                    <label className="toggle-switch">
-                      <input
-                        type="checkbox"
-                        checked={video.isActive}
-                        onChange={(e) => {
-                          e.stopPropagation();
-                          handleToggleActive(video);
-                        }}
-                      />
-                      <span className="slider"></span>
-                    </label>
+                    <ToggleSwitch
+                      checked={video.isActive}
+                      onChange={() => handleToggleActive(video)}
+                      aria-label={video.isActive ? "활성화됨" : "비활성화됨"}
+                    />
                   </td>
                   <td>{new Date(video.createdAt).toLocaleDateString()}</td>
                   <td>
@@ -361,15 +356,12 @@ export default function VideoManagement() {
                     />
                   </div>
                   <div className="toggle-row">
-                    <label className="toggle-switch">
-                      <input
-                        type="checkbox"
-                        name="isActive"
-                        checked={!!editForm.isActive}
-                        onChange={handleEditChange}
-                      />
-                      <span className="slider"></span>
-                    </label>
+                    <ToggleSwitch
+                      checked={!!editForm.isActive}
+                      onChange={(checked) =>
+                        setEditForm((prev) => ({ ...prev, isActive: checked }))
+                      }
+                    />
                     <span className="toggle-status">
                       {editForm.isActive ? "활성" : "비활성"}
                     </span>

@@ -19,6 +19,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:" + uploadPath + File.separator);
         
         System.out.println("=== WebConfig loaded: Static resource handler configured ===");
+        System.out.println("Current directory: " + currentDir);
         System.out.println("Upload path: " + uploadPath);
+        System.out.println("Resource handler: /uploads/** -> file:" + uploadPath + File.separator);
     }
 } 

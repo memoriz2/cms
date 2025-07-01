@@ -2,18 +2,11 @@ import React from "react";
 import "./Sidebar.css";
 
 interface SidebarProps {
-  isOpen: boolean;
-  onToggle: () => void;
   activeMenu: string;
   onMenuChange: (menu: string) => void;
 }
 
-const Sidebar = ({
-  isOpen,
-  onToggle,
-  activeMenu,
-  onMenuChange,
-}: SidebarProps) => {
+const Sidebar = ({ activeMenu, onMenuChange }: SidebarProps) => {
   const menuItems = [
     {
       label: "비디오 관리",
@@ -28,6 +21,12 @@ const Sidebar = ({
       path: "/banners",
     },
     {
+      label: "배너 뉴스 관리",
+      icon: "news",
+      id: "banner-news",
+      path: "/banner-news",
+    },
+    {
       label: "인사말 관리",
       icon: "greeting",
       id: "greetings",
@@ -36,12 +35,9 @@ const Sidebar = ({
   ];
 
   return (
-    <div className={`sidebar ${isOpen ? "open" : ""}`}>
+    <div className="sidebar">
       <div className="sidebar-header">
         <h2>관리자 포털</h2>
-        <button onClick={onToggle} className="sidebar-toggle">
-          {isOpen ? "X" : "☰"}
-        </button>
       </div>
 
       <nav className="sidebar-nav">

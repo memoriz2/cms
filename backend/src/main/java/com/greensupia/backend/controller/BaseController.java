@@ -55,4 +55,17 @@ public class BaseController {
         String url = "/" + filePath.replace("\\", "/");
         return ResponseEntity.ok(Map.of("url", url));
     }
+
+    // 배너 뉴스용 이미지 업로드
+    @PostMapping("/api/uploads/banner-news")
+    public ResponseEntity<?> uploadBannerNewsImage(@RequestParam("file") MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "파일이 없습니다."));
+        }
+        String filePath = fileUtil.saveFile(file, "banner-news");
+        // URL 경로만 반환 (윈도우/리눅스 경로 구분 처리)
+        String url = "/" + filePath.replace("\\", "/");
+        System.out.println("=== Image upload: filePath=" + filePath + ", url=" + url + " ===");
+        return ResponseEntity.ok(Map.of("url", url, "filePath", filePath));
+    }
 }

@@ -7,14 +7,10 @@
   width: 250px;
   background: #2c3e50;
   color: white;
-  transform: translateX(-100%);
+  transform: translateX(0);
   transition: transform 0.3s ease;
   z-index: 1000;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar.open {
-  transform: translateX(0);
 }
 
 .sidebar-header {
@@ -86,9 +82,10 @@
 @media (max-width: 768px) {
   .sidebar {
     width: 100%;
+    transform: translateX(-100%);
   }
 
-  .main-content.sidebar-open {
-    margin-left: 0;
+  .sidebar.open {
+    transform: translateX(0);
   }
 }

@@ -21,7 +21,7 @@ public class BannerNews {
     private String source;
     private String imagePath;
     private String linkUrl;
-    private boolean isActive;
+    private Boolean isActive = false;
     private LocalDateTime createdAt;
 
     @PrePersist

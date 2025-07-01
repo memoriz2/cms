@@ -3,7 +3,8 @@ import "./Modal.css";
 
 interface ModalProps {
   isOpen: boolean;
-  message: string;
+  message?: string;
+  children?: React.ReactNode;
   onConfirm?: () => void;
   onClose: () => void;
   confirmText?: string;
@@ -14,6 +15,7 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({
   isOpen,
   message,
+  children,
   onConfirm,
   onClose,
   confirmText = "확인",
@@ -34,19 +36,33 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div className="custom-modal-backdrop" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <p>{message}</p>
-        <div className="modal-actions">
-          {showCancel && (
-            <button onClick={handleCancel} className="cancel-btn">
-              {cancelText}
-            </button>
-          )}
-          <button onClick={handleConfirm} className="confirm-btn">
-            {confirmText}
-          </button>
-        </div>
+    <div
+      className="custom-modal-backdrop"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+    >
+      <div
+        className={`modal-content ${!children ? "message-modal" : ""}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {children ? (
+          children
+        ) : (
+          <>
+            <p>{message}</p>
+            <div className="modal-actions">
+              {showCancel && (
+                <button onClick={handleCancel} className="cancel-btn">
+                  {cancelText}
+                </button>
+              )}
+              <button onClick={handleConfirm} className="confirm-btn">
+                {confirmText}
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

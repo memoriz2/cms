@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { API_ENDPOINTS } from "../config";
 import TipTapEditor from "./TipTapEditor";
 import "./GreetingManagement.css";
+import ToggleSwitch from "./ToggleSwitch";
 
 interface Greeting {
   id: number;
@@ -419,21 +420,16 @@ const GreetingManagement: React.FC = () => {
               <div className="form-group">
                 <label className="form-label">활성화 상태</label>
                 <div className="toggle-container">
-                  <label className="toggle-switch">
-                    <input
-                      type="checkbox"
-                      id="isActive"
-                      name="isActive"
-                      checked={addFormData.isActive}
-                      onChange={(e) =>
-                        setAddFormData({
-                          ...addFormData,
-                          isActive: e.target.checked,
-                        })
-                      }
-                    />
-                    <span className="toggle-slider"></span>
-                  </label>
+                  <ToggleSwitch
+                    id="isActive"
+                    checked={addFormData.isActive}
+                    onChange={(checked) =>
+                      setAddFormData({
+                        ...addFormData,
+                        isActive: checked,
+                      })
+                    }
+                  />
                   <span className="toggle-label">
                     {addFormData.isActive ? "활성화됨" : "비활성화됨"}
                   </span>

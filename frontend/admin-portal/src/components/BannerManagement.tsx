@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { API_ENDPOINTS } from "../config";
 import Modal from "./Modal";
+import ToggleSwitch from "./ToggleSwitch";
 
 interface Banner {
   id: number;
@@ -321,17 +322,11 @@ const BannerManagement = () => {
                     <h3>{banner.title}</h3>
                   </header>
                   <div className="banner-info">
-                    <label className="toggle-switch">
-                      <input
-                        type="checkbox"
-                        checked={banner.isActive}
-                        onChange={(e) => {
-                          e.stopPropagation();
-                          handleToggleActive(banner);
-                        }}
-                      />
-                      <span className="slider"></span>
-                    </label>
+                    <ToggleSwitch
+                      checked={banner.isActive}
+                      onChange={() => handleToggleActive(banner)}
+                      aria-label={banner.isActive ? "활성화됨" : "비활성화됨"}
+                    />
                     <span className="toggle-status">
                       {banner.isActive ? "활성" : "비활성"}
                     </span>
