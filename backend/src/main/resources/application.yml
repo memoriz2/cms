@@ -1,26 +1,26 @@
 spring:
-    datasource:
-        url: jdbc:mysql://localhost:3306/greensupia?useSSL=false&serverTimezone=UTC
-        username: root
-        password: Rmflstnvldk787!
-        driver-class-name: com.mysql.cj.jdbc.Driver
-    jpa:
-        hibernate:
-            ddl-auto: update
-        show-sql: true
-        properties:
-            hibernate:
-                format_sql: true
-                dialect: org.hibernate.dialect.MySQL8Dialect
-    security:
-        user:
-            name: content-manager
-            password: Rmflstnvldk787!
-            roles: CONTENT_MANAGER
+  datasource:
+    url: jdbc:mysql://localhost:3306/greensupia?useSSL=false&serverTimezone=UTC
+    username: greensupia
+    password: Rmflstnvldk787!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  security:
+    user:
+      name: content-manager
+      password: Rmflstnvldk787!
+      roles: CONTENT_MANAGER
 server:
-    port: 8080
+  port: 8080
 
 admin:
-    url: http://localhost:3000
+  url: http://localhost:3000
 user:
-    url: http://localhost:3001
+  url: http://localhost:3001
