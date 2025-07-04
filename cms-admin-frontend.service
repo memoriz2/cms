@@ -1,0 +1,14 @@
+[Unit]
+Description=CMS Admin Frontend
+After=network.target
+
+[Service]
+Type=simple
+User=centos
+WorkingDirectory=/app/greensupia/cms/frontend/admin-portal
+Environment=PORT=3000
+ExecStart=/usr/bin/npm start
+Restart=always
+
+[Install]
+WantedBy=multi-user.target 
