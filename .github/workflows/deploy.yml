@@ -30,7 +30,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           script: |
-            cd /app/cms
+            cd /app/greensupia/cms
             git pull origin main
             cd backend
             mvn clean package -DskipTests
