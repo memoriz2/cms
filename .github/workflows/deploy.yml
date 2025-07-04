@@ -3,6 +3,8 @@ name: Deploy CMS
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   deploy:
