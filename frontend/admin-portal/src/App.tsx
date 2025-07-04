@@ -4,6 +4,7 @@ import VideoManagement from "./components/VideoManagement";
 import BannerManagement from "./components/BannerManagement";
 import BannerNewsManagement from "./components/BannerNewsManagement";
 import GreetingManagement from "./components/GreetingManagement";
+import HistoryManagement from "./components/HistoryManagement";
 import "./App.css";
 
 function App() {
@@ -32,6 +33,8 @@ function App() {
         return <BannerNewsManagement />;
       case "greetings":
         return <GreetingManagement />;
+      case "histories":
+        return <HistoryManagement />;
       default:
         return <VideoManagement />;
     }
@@ -47,6 +50,8 @@ function App() {
         return "배너 뉴스 관리";
       case "greetings":
         return "인사말 관리";
+      case "histories":
+        return "연혁 관리";
       default:
         return "비디오 관리";
     }

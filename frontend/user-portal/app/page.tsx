@@ -6,6 +6,7 @@ import axios from "axios";
 import { API_URL } from "../config";
 import "./page.css";
 import BannerNewsSection from "./components/BannerNewsSection";
+import HistorySection from "./components/HistorySection";
 
 interface Video {
   id: number;
@@ -162,6 +163,8 @@ export default function Home() {
       )}
       {/* 배너뉴스 섹션 */}
       <BannerNewsSection />
+      {/* 연혁 섹션 */}
+      <HistorySection />
       {/* 비디오 섹션 */}
       <section className="video-section">
         {video ? (

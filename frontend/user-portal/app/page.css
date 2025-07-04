@@ -298,3 +298,24 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* 연혁 섹션 추가 스타일 (page.css에서 보완) */
+.history-section {
+  background: #fff;
+  margin-bottom: 40px;
+  padding: 60px 0 40px 0;
+  width: 100%;
+}
+
+/* 연혁 섹션 반응형 조정 */
+@media (max-width: 768px) {
+  .history-section {
+    padding: 30px 0 20px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .history-section {
+    padding: 20px 15px;
+  }
+}

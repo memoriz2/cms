@@ -34,6 +34,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/videos/**").permitAll()
                 .requestMatchers("/api/banners/**").permitAll()  // 사용자용 배너 API 허용
                 .requestMatchers("/api/greetings/**").permitAll()  // 사용자용 인사말 API 허용
+                .requestMatchers("/api/histories/**").permitAll()  // 사용자용 연혁 API 허용
+                .requestMatchers("/api/organization-charts/**").permitAll()  // 사용자용 조직도 API 허용
                 .requestMatchers("/uploads/**").permitAll()  // 정적 파일 접근 허용
                 .requestMatchers("/api/banner-news/**").permitAll() // 사용자용 배너 뉴스 API 허용
                 .requestMatchers("/api/uploads/**").permitAll() // 이미지 업로드 API 허용

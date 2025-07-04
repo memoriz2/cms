@@ -4,5 +4,6 @@ export const API_ENDPOINTS = {
   BANNERS: `${API_URL}/api/portal/banners`,
   GREETINGS: `${API_URL}/api/portal/greetings`,
   BANNER_NEWS: `${API_URL}/api/portal/banner-news`,
+  HISTORIES: `${API_URL}/api/portal/histories`,
   UPLOADS: `${API_URL}/api/uploads`,
 } as const;

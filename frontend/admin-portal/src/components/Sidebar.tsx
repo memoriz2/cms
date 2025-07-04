@@ -39,6 +39,12 @@ const Sidebar = ({
       id: "greetings",
       path: "/greetings",
     },
+    {
+      label: "연혁 관리",
+      icon: "history",
+      id: "histories",
+      path: "/histories",
+    },
   ];
 
   return (
