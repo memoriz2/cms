@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { API_URL } from "../../config";
 
 interface BannerNews {
@@ -118,11 +119,12 @@ const BannerNewsSection = () => {
                     overflow: "hidden",
                     borderRadius: 8,
                     background: "#f5f5f5",
+                    position: "relative",
                   }}
                 >
                   {item.imagePath ? (
                     <>
-                      <img
+                      <Image
                         src={
                           item.imagePath.startsWith("http")
                             ? item.imagePath
@@ -133,9 +135,8 @@ const BannerNewsSection = () => {
                               }`
                         }
                         alt={item.title}
+                        fill
                         style={{
-                          width: "100%",
-                          height: "100%",
                           objectFit: "cover",
                         }}
                         onLoad={() => {
