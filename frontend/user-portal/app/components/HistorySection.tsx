@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { API_URL } from "../../config";
-import styles from "./HistorySection.module.css"; 
+import styles from "./HistorySection.module.css";
 
 interface History {
   id: number;
@@ -64,7 +64,10 @@ const HistorySection: React.FC = () => {
 
   if (error) {
     return (
-      <section className={styles.historySection} aria-labelledby="history-heading">
+      <section
+        className={styles.historySection}
+        aria-labelledby="history-heading"
+      >
         <h2 id="history-heading" className={styles.historyTitle}>
           HISTORY
         </h2>
@@ -80,7 +83,10 @@ const HistorySection: React.FC = () => {
 
   if (loading) {
     return (
-      <section className={styles.historySection} aria-labelledby="history-heading">
+      <section
+        className={styles.historySection}
+        aria-labelledby="history-heading"
+      >
         <h2 id="history-heading" className={styles.historyTitle}>
           HISTORY
         </h2>
@@ -93,7 +99,10 @@ const HistorySection: React.FC = () => {
 
   if (histories.length === 0) {
     return (
-      <section className={styles.historySection} aria-labelledby="history-heading">
+      <section
+        className={styles.historySection}
+        aria-labelledby="history-heading"
+      >
         <h2 id="history-heading" className={styles.historyTitle}>
           HISTORY
         </h2>
