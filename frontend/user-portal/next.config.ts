@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import type { Configuration } from "webpack";
 
 const nextConfig: NextConfig = {
   images: {
@@ -11,7 +12,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Next.js 15는 CSS 모듈을 자동으로 처리하므로 별도 설정 불필요
+
+  // Webpack 설정 추가
+  webpack(config: Configuration) {
+    config.module?.rules?.push({
+      test: /\.css$/,
+      use: ["style-loader", "css-loader"],
+    });
+    return config;
+  },
 };
 
 export default nextConfig;
