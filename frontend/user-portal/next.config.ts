@@ -1,5 +1,5 @@
+// next.config.ts
 import type { NextConfig } from "next";
-import type { Configuration } from "webpack";
 
 const nextConfig: NextConfig = {
   images: {
@@ -11,15 +11,6 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
-  },
-
-  // Webpack 설정 추가
-  webpack(config: Configuration) {
-    config.module?.rules?.push({
-      test: /\.css$/,
-      use: ["style-loader", "css-loader"],
-    });
-    return config;
   },
 };
 

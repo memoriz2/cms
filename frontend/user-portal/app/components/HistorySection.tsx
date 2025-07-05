@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { API_URL } from "../../config";
-import "./HistorySection.css"; // 일반 CSS 파일 import
-// import styles from "./HistorySection.module.css"; // 임시 주석 처리
+import styles from "./HistorySection.module.css"; 
 
 interface History {
   id: number;
@@ -47,7 +46,6 @@ const HistorySection: React.FC = () => {
     fetchHistories();
   }, [fetchHistories]);
 
-  // 메모이제이션된 데이터 처리
   const groupedHistories = useMemo(() => {
     const grouped: { [key: string]: History[] } = {};
     histories.forEach((history) => {
@@ -64,16 +62,15 @@ const HistorySection: React.FC = () => {
     [groupedHistories]
   );
 
-  // 에러 상태 렌더링
   if (error) {
     return (
-      <section className="historySection" aria-labelledby="history-heading">
-        <h2 id="history-heading" className="historyTitle">
+      <section className={styles.historySection} aria-labelledby="history-heading">
+        <h2 id="history-heading" className={styles.historyTitle}>
           HISTORY
         </h2>
-        <div className="errorMessage" role="alert">
+        <div className={styles.errorMessage} role="alert">
           {error}
-          <button onClick={fetchHistories} className="retryButton">
+          <button onClick={fetchHistories} className={styles.retryButton}>
             다시 시도
           </button>
         </div>
@@ -81,58 +78,56 @@ const HistorySection: React.FC = () => {
     );
   }
 
-  // 로딩 상태 렌더링
   if (loading) {
     return (
-      <section className="historySection" aria-labelledby="history-heading">
-        <h2 id="history-heading" className="historyTitle">
+      <section className={styles.historySection} aria-labelledby="history-heading">
+        <h2 id="history-heading" className={styles.historyTitle}>
           HISTORY
         </h2>
-        <div className="loading" aria-live="polite">
+        <div className={styles.loading} aria-live="polite">
           연혁을 불러오는 중...
         </div>
       </section>
     );
   }
 
-  // 빈 데이터 처리
   if (histories.length === 0) {
     return (
-      <section className="historySection" aria-labelledby="history-heading">
-        <h2 id="history-heading" className="historyTitle">
+      <section className={styles.historySection} aria-labelledby="history-heading">
+        <h2 id="history-heading" className={styles.historyTitle}>
           HISTORY
         </h2>
-        <div className="emptyState">표시할 연혁이 없습니다.</div>
+        <div className={styles.emptyState}>표시할 연혁이 없습니다.</div>
       </section>
     );
   }
 
   return (
     <section
-      className="historySection"
+      className={styles.historySection}
       aria-labelledby="history-heading"
       role="region"
       aria-live="polite"
     >
-      <h2 id="history-heading" className="historyTitle">
+      <h2 id="history-heading" className={styles.historyTitle}>
         HISTORY
       </h2>
-      <div className="historyTimeline">
+      <div className={styles.historyTimeline}>
         {sortedYears.map((year, yearIndex) => (
-          <div key={year} className="yearGroup" data-year={year}>
-            <h3 className="yearTitle">{year}</h3>
-            <div className="yearContent">
+          <div key={year} className={styles.yearGroup} data-year={year}>
+            <h3 className={styles.yearTitle}>{year}</h3>
+            <div className={styles.yearContent}>
               {groupedHistories[year]
                 .sort((a, b) => a.sortOrder - b.sortOrder)
                 .map((history, historyIndex) => (
                   <div
                     key={history.id}
-                    className="historyItem"
+                    className={styles.historyItem}
                     data-year={year}
                     data-index={historyIndex}
                   >
-                    <div className="historyContent">
-                      <p className="historyDescription">
+                    <div className={styles.historyContent}>
+                      <p className={styles.historyDescription}>
                         {history.description}
                       </p>
                     </div>
