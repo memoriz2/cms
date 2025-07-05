@@ -122,7 +122,7 @@ const HistorySection: React.FC = () => {
         HISTORY
       </h2>
       <div className={styles.historyTimeline}>
-        {sortedYears.map((year, yearIndex) => (
+        {sortedYears.map((year) => (
           <div key={year} className={styles.yearGroup} data-year={year}>
             <h3 className={styles.yearTitle}>{year}</h3>
             <div className={styles.yearContent}>
