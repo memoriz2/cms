@@ -1,6 +1,6 @@
 /* HistorySection.css */
 
-.history-section {
+.historySection {
   margin: 48px 0;
   padding: 0 20px;
   max-width: 1200px;
@@ -21,7 +21,7 @@
   }
 }
 
-.history-title {
+.historyTitle {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 32px;
@@ -70,7 +70,7 @@
 }
 
 /* 에러 상태 */
-.error-message {
+.errorMessage {
   text-align: center;
   padding: 40px 20px;
   color: #d32f2f;
@@ -94,7 +94,7 @@
   }
 }
 
-.retry-button {
+.retryButton {
   background: #1976d2;
   color: white;
   border: none;
@@ -108,7 +108,7 @@
   overflow: hidden;
 }
 
-.retry-button::before {
+.retryButton::before {
   content: "";
   position: absolute;
   top: 0;
@@ -124,18 +124,18 @@
   transition: left 0.5s;
 }
 
-.retry-button:hover::before {
+.retryButton:hover::before {
   left: 100%;
 }
 
-.retry-button:hover {
+.retryButton:hover {
   background: #1565c0;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
 }
 
 /* 빈 상태 */
-.empty-state {
+.emptyState {
   text-align: center;
   padding: 40px 20px;
   color: #666;
@@ -153,7 +153,7 @@
 }
 
 /* 타임라인 컨테이너 */
-.history-timeline {
+.historyTimeline {
   position: relative;
   padding-left: 30px;
   opacity: 0;
@@ -171,7 +171,7 @@
   }
 }
 
-.history-timeline::before {
+.historyTimeline::before {
   content: "";
   position: absolute;
   left: 15px;
@@ -190,31 +190,42 @@
   }
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* 연도 그룹 */
-.year-group {
+.yearGroup {
   margin-bottom: 40px;
   position: relative;
   opacity: 0;
   animation: fadeInUp 0.6s ease-out forwards;
 }
 
-.year-group:nth-child(1) {
+.yearGroup:nth-child(1) {
   animation-delay: 0.8s;
 }
-.year-group:nth-child(2) {
+.yearGroup:nth-child(2) {
   animation-delay: 1s;
 }
-.year-group:nth-child(3) {
+.yearGroup:nth-child(3) {
   animation-delay: 1.2s;
 }
-.year-group:nth-child(4) {
+.yearGroup:nth-child(4) {
   animation-delay: 1.4s;
 }
-.year-group:nth-child(5) {
+.yearGroup:nth-child(5) {
   animation-delay: 1.6s;
 }
 
-.year-group::before {
+.yearGroup::before {
   content: "";
   position: absolute;
   left: -22px;
@@ -240,7 +251,7 @@
   }
 }
 
-.year-title {
+.yearTitle {
   font-size: 1.5rem;
   font-weight: 600;
   color: #009cff;
@@ -262,12 +273,12 @@
 }
 
 /* 연도별 콘텐츠 */
-.year-content {
+.yearContent {
   margin-left: 20px;
 }
 
 /* 연혁 아이템 */
-.history-item {
+.historyItem {
   background: white;
   border-radius: 8px;
   padding: 16px 20px;
@@ -281,19 +292,19 @@
   animation: slideInItem 0.6s ease-out forwards;
 }
 
-.history-item:nth-child(1) {
+.historyItem:nth-child(1) {
   animation-delay: 0.1s;
 }
-.history-item:nth-child(2) {
+.historyItem:nth-child(2) {
   animation-delay: 0.2s;
 }
-.history-item:nth-child(3) {
+.historyItem:nth-child(3) {
   animation-delay: 0.3s;
 }
-.history-item:nth-child(4) {
+.historyItem:nth-child(4) {
   animation-delay: 0.4s;
 }
-.history-item:nth-child(5) {
+.historyItem:nth-child(5) {
   animation-delay: 0.5s;
 }
 
@@ -304,7 +315,7 @@
   }
 }
 
-.history-item::before {
+.historyItem::before {
   content: "";
   position: absolute;
   left: -8px;
@@ -317,23 +328,23 @@
   transition: all 0.3s ease;
 }
 
-.history-item:hover {
+.historyItem:hover {
   transform: translateX(8px) scale(1.02);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   border-left-width: 6px;
 }
 
-.history-item:hover::before {
+.historyItem:hover::before {
   background: #ff6b35;
   transform: scale(1.5);
   box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
 }
 
-.history-content {
+.historyContent {
   margin: 0;
 }
 
-.history-description {
+.historyDescription {
   font-size: 16px;
   line-height: 1.6;
   color: var(--foreground);
@@ -342,116 +353,116 @@
   transition: color 0.3s ease;
 }
 
-.history-item:hover .history-description {
+.historyItem:hover .historyDescription {
   color: #009cff;
 }
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
-  .history-section {
+  .historySection {
     padding: 0 16px;
     margin: 32px 0;
   }
 
-  .history-title {
+  .historyTitle {
     font-size: 1.75rem;
     margin-bottom: 24px;
   }
 
-  .history-timeline {
+  .historyTimeline {
     padding-left: 20px;
   }
 
-  .history-timeline::before {
+  .historyTimeline::before {
     left: 10px;
   }
 
-  .year-group::before {
+  .yearGroup::before {
     left: -17px;
     width: 10px;
     height: 10px;
   }
 
-  .year-title {
+  .yearTitle {
     font-size: 1.25rem;
     margin-left: 15px;
   }
 
-  .year-content {
+  .yearContent {
     margin-left: 15px;
   }
 
-  .history-item {
+  .historyItem {
     padding: 12px 16px;
     margin-bottom: 10px;
   }
 
-  .history-description {
+  .historyDescription {
     font-size: 15px;
   }
 }
 
 @media (max-width: 480px) {
-  .history-section {
+  .historySection {
     padding: 0 12px;
     margin: 24px 0;
   }
 
-  .history-title {
+  .historyTitle {
     font-size: 1.5rem;
     margin-bottom: 20px;
   }
 
-  .history-timeline {
+  .historyTimeline {
     padding-left: 15px;
   }
 
-  .history-timeline::before {
+  .historyTimeline::before {
     left: 7px;
   }
 
-  .year-group::before {
+  .yearGroup::before {
     left: -12px;
     width: 8px;
     height: 8px;
   }
 
-  .year-title {
+  .yearTitle {
     font-size: 1.1rem;
     margin-left: 12px;
   }
 
-  .year-content {
+  .yearContent {
     margin-left: 12px;
   }
 
-  .history-item {
+  .historyItem {
     padding: 10px 12px;
     margin-bottom: 8px;
   }
 
-  .history-description {
+  .historyDescription {
     font-size: 14px;
   }
 }
 
 /* 다크 모드 지원 */
 @media (prefers-color-scheme: dark) {
-  .history-item {
+  .historyItem {
     background: #1a1a1a;
     border-left-color: #009cff;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
 
-  .history-item:hover {
+  .historyItem:hover {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
   }
 
-  .history-description {
+  .historyDescription {
     color: var(--foreground);
   }
 
-  .error-message {
+  .errorMessage {
     background: #1a1a1a;
     color: #ff6b6b;
   }
