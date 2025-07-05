@@ -12,12 +12,19 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://139.150.73.107:3000", "http://139.150.73.107:3001", 
-                               "http://localhost:3000", "http://localhost:3001", 
-                               "http://127.0.0.1:3000", "http://127.0.0.1:3001")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+            .allowedOrigins(
+                "http://localhost:3000",
+                "http://localhost:3001",
+                "http://139.150.73.107:3000",
+                "http://139.150.73.107:3001",
+                "http://www.jseo.shop",
+                "http://portal.jseo.shop",
+                "https://www.jseo.shop",
+                "https://portal.jseo.shop"
+            )
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .allowedHeaders("*")
+            .allowCredentials(true);
     }
 
     @Override
