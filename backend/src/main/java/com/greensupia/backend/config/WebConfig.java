@@ -13,10 +13,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
             .allowedOrigins(
-                "http://localhost:3000",
-                "http://localhost:3001",
-                "http://139.150.73.107:3000",
-                "http://139.150.73.107:3001",
                 "http://www.jseo.shop",
                 "http://portal.jseo.shop",
                 "https://www.jseo.shop",

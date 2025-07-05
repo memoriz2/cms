@@ -21,6 +21,6 @@ server:
   port: 8080
 
 admin:
-  url: http://localhost:3000
+  url: http://www.jseo.shop
 user:
-  url: http://localhost:3001
+  url: http://portal.jseo.shop
