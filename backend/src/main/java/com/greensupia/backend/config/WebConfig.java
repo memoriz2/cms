@@ -13,10 +13,15 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
             .allowedOrigins(
-                "http://www.jseo.shop",
-                "http://portal.jseo.shop",
-                "https://www.jseo.shop",
-                "https://portal.jseo.shop"
+                // Production Domain URLs (주석처리)
+                // "http://www.jseo.shop",
+                // "http://portal.jseo.shop",
+                // "https://www.jseo.shop",
+                // "https://portal.jseo.shop"
+                
+                // Local Development URLs
+                "http://localhost:3000",
+                "http://localhost:3001"
             )
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
             .allowedHeaders("*")

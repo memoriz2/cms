@@ -20,7 +20,14 @@ spring:
 server:
   port: 8080
 
+# Production Domain URLs (주석처리)
+# admin:
+#   url: http://www.jseo.shop
+# user:
+#   url: http://portal.jseo.shop
+
+# Local Development URLs
 admin:
-  url: http://www.jseo.shop
+  url: http://localhost:3000
 user:
-  url: http://portal.jseo.shop
+  url: http://localhost:3001
