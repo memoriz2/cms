@@ -11,6 +11,24 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    cssChunking: 'strict',
+  },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.module\.css$/,
+      use: [
+        'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            modules: true,
+          },
+        },
+      ],
+    });
+    return config;
+  },
 };
 
 export default nextConfig;
