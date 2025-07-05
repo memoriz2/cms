@@ -11,24 +11,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  experimental: {
-    cssChunking: 'strict',
-  },
-  webpack: (config) => {
-    config.module.rules.push({
-      test: /\.module\.css$/,
-      use: [
-        'style-loader',
-        {
-          loader: 'css-loader',
-          options: {
-            modules: true,
-          },
-        },
-      ],
-    });
-    return config;
-  },
+  // Next.js 15는 CSS 모듈을 자동으로 처리하므로 별도 설정 불필요
 };
 
 export default nextConfig;

@@ -1,0 +1,458 @@
+/* HistorySection.css */
+
+.historySection {
+  margin: 48px 0;
+  padding: 0 20px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.historyTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+  text-align: center;
+  color: var(--foreground);
+  opacity: 0;
+  animation: slideInDown 0.6s ease-out 0.2s forwards;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 로딩 상태 */
+.loading {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-size: 16px;
+  position: relative;
+}
+
+.loading::after {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #009cff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+  margin-left: 10px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 에러 상태 */
+.errorMessage {
+  text-align: center;
+  padding: 40px 20px;
+  color: #d32f2f;
+  font-size: 16px;
+  background: #ffebee;
+  border-radius: 8px;
+  margin: 20px 0;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+.retryButton {
+  background: #1976d2;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.retryButton::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.retryButton:hover::before {
+  left: 100%;
+}
+
+.retryButton:hover {
+  background: #1565c0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+}
+
+/* 빈 상태 */
+.emptyState {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-size: 16px;
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 타임라인 컨테이너 */
+.historyTimeline {
+  position: relative;
+  padding-left: 30px;
+  opacity: 0;
+  animation: slideInLeft 0.8s ease-out 0.4s forwards;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.historyTimeline::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #009cff, #e0e0e0);
+  animation: drawLine 1.2s ease-out 0.6s forwards;
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+@keyframes drawLine {
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* 연도 그룹 */
+.yearGroup {
+  margin-bottom: 40px;
+  position: relative;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.yearGroup:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.yearGroup:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.yearGroup:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.yearGroup:nth-child(5) {
+  animation-delay: 0.4s;
+}
+
+.yearGroup::before {
+  content: "";
+  position: absolute;
+  left: -22px;
+  top: 8px;
+  width: 12px;
+  height: 12px;
+  background: #009cff;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 0 0 2px #009cff;
+  animation: pulse 2s infinite;
+  z-index: 1;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 156, 255, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 156, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 156, 255, 0);
+  }
+}
+
+.yearTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #009cff;
+  margin-bottom: 16px;
+  animation: slideInRight 0.6s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.yearContent {
+  margin-left: 20px;
+}
+
+.historyItem {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: slideInItem 0.6s ease-out forwards;
+  border-left: 4px solid #009cff;
+}
+
+.historyItem:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.historyItem:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.historyItem:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.historyItem:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.historyItem:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+@keyframes slideInItem {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.historyItem::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 8px solid #009cff;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.historyItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  border-left-color: #007acc;
+}
+
+.historyItem:hover::before {
+  opacity: 1;
+}
+
+.historyContent {
+  position: relative;
+}
+
+.historyDescription {
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.historyItem:hover .historyDescription {
+  color: #009cff;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .historySection {
+    margin: 32px 0;
+    padding: 0 16px;
+  }
+
+  .historyTitle {
+    font-size: 1.75rem;
+    margin-bottom: 24px;
+  }
+
+  .historyTimeline {
+    padding-left: 20px;
+  }
+
+  .historyTimeline::before {
+    left: 10px;
+  }
+
+  .yearGroup::before {
+    left: -17px;
+    width: 10px;
+    height: 10px;
+  }
+
+  .yearTitle {
+    font-size: 1.25rem;
+    margin-bottom: 12px;
+  }
+
+  .yearContent {
+    margin-left: 12px;
+  }
+
+  .historyItem {
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+
+  .historyDescription {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .historySection {
+    margin: 24px 0;
+    padding: 0 12px;
+  }
+
+  .historyTitle {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+
+  .historyTimeline {
+    padding-left: 16px;
+  }
+
+  .historyTimeline::before {
+    left: 8px;
+  }
+
+  .yearGroup::before {
+    left: -14px;
+    width: 8px;
+    height: 8px;
+  }
+
+  .yearTitle {
+    font-size: 1.125rem;
+    margin-bottom: 10px;
+  }
+
+  .yearContent {
+    margin-left: 8px;
+  }
+
+  .historyItem {
+    padding: 10px;
+    margin-bottom: 6px;
+  }
+
+  .historyDescription {
+    font-size: 12px;
+  }
+}
+
+/* 다크 모드 지원 */
+@media (prefers-color-scheme: dark) {
+  .historyItem {
+    background: #2d2d2d;
+    color: #e0e0e0;
+  }
+
+  .historyItem:hover {
+    background: #3d3d3d;
+  }
+
+  .historyDescription {
+    color: #e0e0e0;
+  }
+
+  .errorMessage {
+    background: #3d1f1f;
+    color: #ff6b6b;
+  }
+}
