@@ -467,12 +467,3 @@
     color: #ff6b6b;
   }
 }
-
-/* 접근성을 위한 모션 감소 설정 */
-@media (prefers-reduced-motion: reduce) {
-  :global(*) {
-    animation-duration: 0.01ms;
-    animation-iteration-count: 1;
-    transition-duration: 0.01ms;
-  }
-}
